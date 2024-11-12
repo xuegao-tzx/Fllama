@@ -1,0 +1,111 @@
+PODS:
+  - background_downloader (0.0.1):
+    - Flutter
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - device_info_plus (0.0.1):
+    - Flutter
+  - file_picker (0.0.1):
+    - Flutter
+  - fllama (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_displaymode (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - isar_flutter_libs (1.0.0):
+    - Flutter
+  - MMKV (2.0.0):
+    - MMKVCore (~> 2.0.0)
+  - mmkv_ios (2.0.0):
+    - Flutter
+    - MMKV (< 2.1, >= 2.0.0)
+  - MMKVCore (2.0.0)
+  - package_info_plus (0.4.5):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - Toast (4.1.1)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - vibration (1.7.5):
+    - Flutter
+
+DEPENDENCIES:
+  - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - fllama (from `.symlinks/plugins/fllama/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_displaymode (from `.symlinks/plugins/flutter_displaymode/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
+  - mmkv_ios (from `.symlinks/plugins/mmkv_ios/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
+
+SPEC REPOS:
+  trunk:
+    - MMKV
+    - MMKVCore
+    - Toast
+
+EXTERNAL SOURCES:
+  background_downloader:
+    :path: ".symlinks/plugins/background_downloader/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/darwin"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
+  fllama:
+    :path: ".symlinks/plugins/fllama/ios"
+  Flutter:
+    :path: Flutter
+  flutter_displaymode:
+    :path: ".symlinks/plugins/flutter_displaymode/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  isar_flutter_libs:
+    :path: ".symlinks/plugins/isar_flutter_libs/ios"
+  mmkv_ios:
+    :path: ".symlinks/plugins/mmkv_ios/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
+
+SPEC CHECKSUMS:
+  background_downloader: 2f6f22aa1663f7a99a5e915689ebe8cf29e42ddd
+  connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
+  file_picker: 684373a825f14becb5556cf6c5b88610290914b2
+  fllama: d710313cf141f66abe5dc36806263537427ce878
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_displaymode: ecb99eeda1a8b07a1e2cd27e22547f79a39989b2
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
+  isar_flutter_libs: d8b2d264cd5a0f24c7653c67f01b3d934ec80991
+  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
+  mmkv_ios: 8ccd8dda5021740bec0ff8ec8b468e62288a2a0a
+  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
+
+PODFILE CHECKSUM: 0507989d53dcf86f06ac333f90f09f9faaf2c814
+
+COCOAPODS: 1.15.2

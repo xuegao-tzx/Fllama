@@ -1,0 +1,6 @@
+--- sgemm.cpp.orig
++++ sgemm.cpp
+@@ -206,1 +206,1 @@
+-#if !defined(_MSC_VER)
++#if !defined(_MSC_VER) && !defined(__ARM_ARCH_7A__)
+template <> inline float16x8_t load(const lm_ggml_fp16_t *p) {

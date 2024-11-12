@@ -1,0 +1,6 @@
+/build
+/.gradle
+*.iml
+.gradle
+.DS_Store
+/.cxx

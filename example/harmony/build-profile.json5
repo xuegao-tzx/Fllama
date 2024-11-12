@@ -1,0 +1,75 @@
+{
+  "app": {
+    "signingConfigs": [],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          },
+          "nativeCompiler": "BiSheng",
+          "nativeLib": {
+            "excludeFromHar": false
+          },
+        },
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+        "buildOption": {
+          "packOptions": {
+            "buildAppSkipSignHap": true
+          },
+          "debuggable": true,
+          "resOptions": {
+            "compression": {
+              "media": {
+                "enable": true
+              }
+            },
+          }
+        }
+      },
+      {
+        "name": "release",
+        "buildOption": {
+          "packOptions": {
+            "buildAppSkipSignHap": false
+          },
+          "debuggable": false,
+          "resOptions": {
+            "compression": {
+              "media": {
+                "enable": true
+              }
+            },
+          }
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hllama",
+      "srcPath": "./hllama",
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "module": {
+    "name": "hllama",
+    "type": "har",
+    "description": "$string:shared_desc",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ],
+    "libIsolation": true
+  }
+}

@@ -1,0 +1,123 @@
+group = "ink.xcl.fllama"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = "2.0.21"
+    ext.coroutines_version = '1.9.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.7.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    if (project.android.hasProperty("namespace")) {
+        namespace = "ink.xcl.fllama"
+    }
+
+    compileSdk 35
+    ndkVersion "28.0.12433566"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
+        apiVersion = "2.1"
+        languageVersion = "2.1"
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/CMakeLists.txt"
+            version "3.31.0"
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 23
+        consumerProguardFiles 'proguard-rules.pro'
+        ndk {
+            abiFilters("arm64-v8a", "x86_64", "armeabi-v7a")
+        }
+        externalNativeBuild {
+            cmake {
+                cFlags "-O3 -flto -ffunction-sections -fdata-sections -fvisibility=hidden -funroll-loops -fomit-frame-pointer"
+                abiFilters "arm64-v8a", "x86_64"
+                cppFlags "-O3 -flto -ffunction-sections -fdata-sections -fvisibility=hidden -funroll-loops -fomit-frame-pointer"
+                arguments "-Wl,--gc-sections","-DANDROID_STL=c++_static","-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON","-Wl,-z,max-page-size=16384"
+            }
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    packaging {
+        dex {
+            useLegacyPackaging true
+        }
+        jniLibs {
+            useLegacyPackaging true
+        }
+        resources {
+            resources.excludes += "DebugProbesKt.bin"
+            resources.excludes += "META-INF/DEPENDENCIES"
+            resources.excludes += "META-INF/NOTICE"
+            resources.excludes += "META-INF/LICENSE"
+            resources.excludes += "META-INF/LICENSE.txt"
+            resources.excludes += "META-INF/NOTICE.txt"
+            resources.excludes += "META-INF/LICENSE.md"
+            resources.excludes += "META-INF/LICENSE-notice.md"
+            resources.excludes += "META-INF/{AL2.0,LGPL2.1,LICENSE,NOTICE,DEPENDENCIES}"
+            resources.excludes += "DebugProbesKt.bin"
+            resources.excludes += "META-INF/*.kotlin_module"
+            resources.excludes += "**/*.kotlin_module"
+            resources.excludes += "**/*.version"
+        }
+    }
+}
+
+dependencies {
+    // Do not pump unless dropping support for AGP7
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:$kotlin_version")
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+}

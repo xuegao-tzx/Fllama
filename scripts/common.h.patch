@@ -1,0 +1,30 @@
+--- common.h.orig
++++ common.h
+@@ -40,6 +40,17 @@
+ extern char const * LLAMA_BUILD_TARGET;
+
+ struct common_control_vector_load_info;
++
++#define print_build_info() do {                                                                     \
++    fprintf(stderr, "%s: build = %d (%s)\n", __func__, LLAMA_BUILD_NUMBER, LLAMA_COMMIT);           \
++    fprintf(stderr, "%s: built with %s for %s\n", __func__, LLAMA_COMPILER, LLAMA_BUILD_TARGET);    \
++} while(0)
++
++// build info
++extern int LLAMA_BUILD_NUMBER;
++extern char const *LLAMA_COMMIT;
++extern char const *LLAMA_COMPILER;
++extern char const *LLAMA_BUILD_TARGET;
+
+ //
+ // CPU utils
+@@ -271,6 +282,9 @@
+     bool warmup            = true;  // warmup run
+     bool check_tensors     = false; // validate tensor data
+
++    llama_progress_callback progress_callback;
++    void * progress_callback_user_data;
++
+     std::string cache_type_k = "f16"; // KV cache data type for the K
+     std::string cache_type_v = "f16"; // KV cache data type for the V
+

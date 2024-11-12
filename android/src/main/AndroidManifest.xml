@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ink.xcl.fllama"
+    tools:targetApi="35">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <application
+        android:gwpAsanMode="never"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true">
+        <service
+            android:name=".FllamaService"
+            android:enabled="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:foregroundServiceType="dataSync"
+            />
+    </application>
+</manifest>

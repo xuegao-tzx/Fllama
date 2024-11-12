@@ -1,0 +1,38 @@
+allprojects {
+    repositories {
+        maven {
+            allowInsecureProtocol = true
+            url "http://download.flutter.io"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            url "https://git.xcl.ink/api/packages/tianzixuan/maven/"
+        }
+        maven {
+            url "https://jitpack.io/"
+        }
+        maven {
+            url "https://developer.huawei.com/repo/"
+        }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

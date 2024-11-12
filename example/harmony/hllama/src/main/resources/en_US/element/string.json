@@ -1,0 +1,8 @@
+{
+  "string": [
+    {
+      "name": "shared_desc",
+      "value": "Use llama.cpp models implementation for HarmonyOS Next."
+    }
+  ]
+}

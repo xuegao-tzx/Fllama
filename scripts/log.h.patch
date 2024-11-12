@@ -1,0 +1,85 @@
+--- log.h.orig
++++ log.h
+@@ -76,6 +76,77 @@
+         } \
+     } while (0)
+
++#if defined(__ANDROID__)
++#if defined(DLOGGING_ENABLED)
++#define LLAMA_ANDROID_LOG_TAG "FLLAMA_ANDROID"
++#define LOG(...)             __android_log_print(ANDROID_LOG_INFO, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOGV(verbosity, ...) __android_log_print(ANDROID_LOG_INFO, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++
++#define LOG_INF(...) __android_log_print(ANDROID_LOG_INFO, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_WRN(...) __android_log_print(ANDROID_LOG_WARN, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_ERR(...) __android_log_print(ANDROID_LOG_ERROR, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_DBG(...) __android_log_print(ANDROID_LOG_DEBUG, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_CNT(...) __android_log_print(ANDROID_LOG_DEBUG, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++
++#define LOG_INFV(verbosity, ...) __android_log_print(ANDROID_LOG_INFO, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_WRNV(verbosity, ...) __android_log_print(ANDROID_LOG_WARN, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_ERRV(verbosity, ...) __android_log_print(ANDROID_LOG_ERROR, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_DBGV(verbosity, ...) __android_log_print(ANDROID_LOG_DEBUG, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#define LOG_CNTV(verbosity, ...) __android_log_print(ANDROID_LOG_DEBUG, LLAMA_ANDROID_LOG_TAG, __VA_ARGS__)
++#else
++#define LOG(...)
++#define LOGV(verbosity, ...)
++
++#define LOG_INF(...)
++#define LOG_WRN(...)
++#define LOG_ERR(...)
++#define LOG_DBG(...)
++#define LOG_CNT(...)
++
++#define LOG_INFV(verbosity, ...)
++#define LOG_WRNV(verbosity, ...)
++#define LOG_ERRV(verbosity, ...)
++#define LOG_DBGV(verbosity, ...)
++#define LOG_CNTV(verbosity, ...)
++#endif
++#elif defined(OHOS)
++#if defined(DLOGGING_ENABLED)
++#include <hilog/log.h>
++#undef LOG_DOMAIN
++#undef LOG_TAG
++#define LOG_DOMAIN 0x0006
++#define LOG_TAG "FLLAMA_OHOS"
++#define LOG(...)             OH_LOG_DEBUG(LOG_APP, __VA_ARGS__)
++#define LOGV(verbosity, ...) OH_LOG_INFO(LOG_APP, __VA_ARGS__)
++
++#define LOG_INF(...) OH_LOG_INFO(LOG_APP, __VA_ARGS__)
++#define LOG_WRN(...) OH_LOG_WARN(LOG_APP, __VA_ARGS__)
++#define LOG_ERR(...) OH_LOG_ERROR(LOG_APP, __VA_ARGS__)
++#define LOG_DBG(...) OH_LOG_DEBUG(LOG_APP, __VA_ARGS__)
++#define LOG_CNT(...) OH_LOG_DEBUG(LOG_APP, __VA_ARGS__)
++
++#define LOG_INFV(verbosity, ...) OH_LOG_INFO(LOG_APP, __VA_ARGS__)
++#define LOG_WRNV(verbosity, ...) OH_LOG_WARN(LOG_APP, __VA_ARGS__)
++#define LOG_ERRV(verbosity, ...) OH_LOG_ERROR(LOG_APP, __VA_ARGS__)
++#define LOG_DBGV(verbosity, ...) OH_LOG_DEBUG(LOG_APP, __VA_ARGS__)
++#define LOG_CNTV(verbosity, ...) OH_LOG_DEBUG(LOG_APP, __VA_ARGS__)
++#else
++#define LOG(...)
++#define LOGV(verbosity, ...)
++
++#define LOG_INF(...)
++#define LOG_WRN(...)
++#define LOG_ERR(...)
++#define LOG_DBG(...)
++#define LOG_CNT(...)
++
++#define LOG_INFV(verbosity, ...)
++#define LOG_WRNV(verbosity, ...)
++#define LOG_ERRV(verbosity, ...)
++#define LOG_DBGV(verbosity, ...)
++#define LOG_CNTV(verbosity, ...)
++#endif
++#else
+ #define LOG(...)             LOG_TMPL(LM_GGML_LOG_LEVEL_NONE, 0,         __VA_ARGS__)
+ #define LOGV(verbosity, ...) LOG_TMPL(LM_GGML_LOG_LEVEL_NONE, verbosity, __VA_ARGS__)
+
+@@ -90,3 +161,4 @@
+ #define LOG_ERRV(verbosity, ...) LOG_TMPL(LM_GGML_LOG_LEVEL_ERROR, verbosity, __VA_ARGS__)
+ #define LOG_DBGV(verbosity, ...) LOG_TMPL(LM_GGML_LOG_LEVEL_DEBUG, verbosity, __VA_ARGS__)
+ #define LOG_CNTV(verbosity, ...) LOG_TMPL(LM_GGML_LOG_LEVEL_CONT,  verbosity, __VA_ARGS__)
++#endif

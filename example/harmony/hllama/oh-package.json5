@@ -1,0 +1,16 @@
+{
+  "name": "hllama",
+  "version": "0.0.2",
+  "description": "Use llama.cpp models implementation for HarmonyOS Next.",
+  "keywords": ["ai","tool","llama-cpp","llama"],
+  "main": "Index.ets",
+  "author": {
+    "name": "Small Grass Forest",
+    "email": "zixuanxcl@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/xuegao-tzx",
+  "dependencies": {
+    "libhllama.so": "file:./src/main/cpp/types/libhllama",
+  }
+}

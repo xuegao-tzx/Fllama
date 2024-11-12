@@ -1,0 +1,33 @@
+name: fllama
+description: "A Flutter binding for llama.cpp."
+version: 0.0.1
+repository: https://github.com/xuegao-tzx/fllama
+issue_tracker: https://github.com/xuegao-tzx/fllama/issues
+homepage: https://pub.dev/packages/fllama
+
+platforms:
+  android:
+  ios:
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: ink.xcl.fllama
+        pluginClass: FllamaPlugin
+      ios:
+        pluginClass: FllamaPlugin
