@@ -1,7 +1,7 @@
-import 'package:fllama_example/db/models.dart';
-import 'package:fllama_example/net/ModelDownloadController.dart';
-import 'package:fllama_example/view/module/DownloadButton.dart';
-import 'package:fllama_example/vm/ModelVM.dart';
+import 'package:fcllama_example/db/models.dart';
+import 'package:fcllama_example/net/ModelDownloadController.dart';
+import 'package:fcllama_example/view/module/DownloadButton.dart';
+import 'package:fcllama_example/vm/ModelVM.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

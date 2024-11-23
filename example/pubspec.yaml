@@ -1,4 +1,4 @@
-name: fllama_example
+name: fcllama_example
 description: "Demonstrates how to use the fllama plugin."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -18,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fllama:
+  fcllama:
     # When depending on this package from a real application you should use:
     #   fllama: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
@@ -30,13 +30,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   dio: ^5.7.0
   cupertino_icons: ^1.0.8
-  material_symbols_icons: ^4.2791.1
+  material_symbols_icons: ^4.2799.0
   path_provider: ^2.1.5
-  file_picker: ^8.1.3
+  file_picker: ^8.1.4
   path: ^1.9.1
-  mmkv: ^2.0.1
+  mmkv: 2.0.1
   tuple: ^2.0.2
-  logger: ^2.4.0
+  logger: ^2.5.0
   vibration: ^2.0.1
   url_launcher: ^6.3.1
   flutter_easyloading: ^3.0.5

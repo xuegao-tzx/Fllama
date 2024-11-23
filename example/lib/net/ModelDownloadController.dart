@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
-import 'package:fllama/fllama.dart';
-import 'package:fllama_example/db/IsarDao.dart';
-import 'package:fllama_example/utils/DialogUtils.dart';
-import 'package:fllama_example/view/module/DownloadButton.dart';
+import 'package:fcllama/fllama.dart';
+import 'package:fcllama_example/db/IsarDao.dart';
+import 'package:fcllama_example/utils/DialogUtils.dart';
+import 'package:fcllama_example/view/module/DownloadButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -173,7 +173,7 @@ class ModelDownloadController extends DownloadController with ChangeNotifier {
     final Directory libraryDirectory = Platform.isAndroid
         ? await getApplicationSupportDirectory()
         : await getLibraryDirectory();
-    final mFPath =  "${libraryDirectory.path}/model/$_fileName.gguf";
+    final mFPath = "${libraryDirectory.path}/model/$_fileName.gguf";
     Get.log(
         "_downloadUrl=$_downloadUrl _fileHash=$_fileHash _fileName=$_fileName Path=$mFPath");
     final (baseDirectory, directory, filename) =
@@ -204,7 +204,7 @@ class ModelDownloadController extends DownloadController with ChangeNotifier {
           _progress = 0.99;
           notifyListeners();
           try {
-            if (await Fllama.instance()?.getFileSHA256(mFPath) == _fileHash) {
+            if (await FCllama.instance()?.getFileSHA256(mFPath) == _fileHash) {
               Get.log("[文件SHA256验证成功] mFPath=$mFPath");
               await IsarDao.instance()?.addOneDownloadModel(
                   mName: _modelName,

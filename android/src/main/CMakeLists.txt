@@ -11,8 +11,13 @@ set(
         SOURCE_FILES
         ${FLLAMA_LIB_DIR}/ggml-alloc.c
         ${FLLAMA_LIB_DIR}/ggml-backend.cpp
+        ${FLLAMA_LIB_DIR}/ggml-backend-reg.cpp
         ${FLLAMA_LIB_DIR}/ggml.c
         ${FLLAMA_LIB_DIR}/ggml-cpu.c
+        ${FLLAMA_LIB_DIR}/ggml-cpu.cpp
+        ${FLLAMA_LIB_DIR}/ggml-cpu-quants.c
+        ${FLLAMA_LIB_DIR}/ggml-threading.cpp
+        ${FLLAMA_LIB_DIR}/ggml-cpu-aarch64.c
         ${FLLAMA_LIB_DIR}/ggml-quants.c
         ${FLLAMA_LIB_DIR}/common.cpp
         ${FLLAMA_LIB_DIR}/json.hpp

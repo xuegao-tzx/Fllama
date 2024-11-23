@@ -5,7 +5,7 @@
  * 版权所有 (c) 田梓萱[小草林] 2021-2024.
  * 所有代码均受中国《计算机软件保护条例》保护，侵权必究.
  */
-import "package:fllama_example/main.dart";
+import "package:fcllama_example/main.dart";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";

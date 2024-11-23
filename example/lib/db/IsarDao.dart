@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fllama_example/bean/newbean.dart';
-import 'package:fllama_example/db/models.dart';
+import 'package:fcllama_example/bean/newbean.dart';
+import 'package:fcllama_example/db/models.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 

@@ -1,7 +1,7 @@
 import 'package:about/about.dart';
-import 'package:fllama_example/bean/Enum.dart';
-import 'package:fllama_example/utils/HorizontalSwipeBack.dart';
-import 'package:fllama_example/vm/AboutVM.dart';
+import 'package:fcllama_example/bean/Enum.dart';
+import 'package:fcllama_example/utils/HorizontalSwipeBack.dart';
+import 'package:fcllama_example/vm/AboutVM.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

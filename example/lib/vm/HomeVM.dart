@@ -1,9 +1,8 @@
-
-import 'package:fllama/fllama.dart';
-import 'package:fllama_example/db/IsarDao.dart';
-import 'package:fllama_example/db/models.dart';
-import 'package:fllama_example/utils/MyToast.dart';
-import 'package:fllama_example/utils/StoreKV.dart';
+import 'package:fcllama/fllama.dart';
+import 'package:fcllama_example/db/IsarDao.dart';
+import 'package:fcllama_example/db/models.dart';
+import 'package:fcllama_example/utils/MyToast.dart';
+import 'package:fcllama_example/utils/StoreKV.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -52,15 +51,15 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     Get.log("[lModel]=$lModel ${lModel?.lmInfo} ${lModel?.lmInfo?.mPath}");
     Future.delayed(const Duration(seconds: 3), () {
       // _setChatItemInList(uName: "gpt", time: chatItemId, content: "测试AI生成的");
-      Fllama.instance()?.completion(
+      FCllama.instance()?.completion(
         double.parse(modelContextId),
         prompt:
-            'This is a conversation between user and FLlama. Please only output the answer and no examples needed. \n User: $msg \n Fllama:',
+            'This is a conversation between user and FCllama. Please only output the answer and no examples needed. \n User: $msg \n FCllama:',
         nPredict: 100,
         emitRealtimeCompletion: true,
         stop: ["<eos>", "User"],
       ).then((res) {
-        Get.log("[FLlama] Res=$res");
+        Get.log("[FCllama] Res=$res");
         isThinking.value = false;
       });
       // Future.delayed(const Duration(seconds: 5), () {
@@ -90,7 +89,7 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> stopMessagePutout() async {
-    Fllama.instance()?.stopCompletion(contextId: double.parse(modelContextId));
+    FCllama.instance()?.stopCompletion(contextId: double.parse(modelContextId));
   }
 
   _setChatItemInList(
@@ -118,14 +117,11 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     chatMesList.setNewList(tList);
   }
 
-  void initModel(String mPath){
-    Fllama.instance()
-        ?.initContext(
-        mPath,
-      emitLoadProgress: true
-    )
+  void initModel(String mPath) {
+    FCllama.instance()
+        ?.initContext(mPath, emitLoadProgress: true)
         .then((context) {
-      Get.log("[FLlama] initContext Done $context");
+      Get.log("[FCllama] initContext Done $context");
       modelContextId = context?["contextId"].toString() ?? "";
       if (modelContextId.isNotEmpty) {
         canThinking.value = true;
@@ -134,20 +130,23 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     });
   }
 
-  void testBench(){
-    Fllama.instance()
-        ?.bench(double.parse(modelContextId),pp:8,tg:4,pl:2,nr: 1).then((res){
-      Get.log("[FLlama] Bench Res $res");
+  void testBench() {
+    FCllama.instance()
+        ?.bench(double.parse(modelContextId), pp: 8, tg: 4, pl: 2, nr: 1)
+        .then((res) {
+      Get.log("[FCllama] Bench Res $res");
     });
   }
 
-  void testTokenize(){
-    Fllama.instance()
-        ?.tokenize(double.parse(modelContextId), text: "What can you do?").then((res){
-      Get.log("[FLlama] Tokenize Res $res");
-      Fllama.instance()
-          ?.detokenize(double.parse(modelContextId), tokens: res?['tokens']).then((res){
-        Get.log("[FLlama] Detokenize Res $res");
+  void testTokenize() {
+    FCllama.instance()
+        ?.tokenize(double.parse(modelContextId), text: "What can you do?")
+        .then((res) {
+      Get.log("[FCllama] Tokenize Res $res");
+      FCllama.instance()
+          ?.detokenize(double.parse(modelContextId), tokens: res?['tokens'])
+          .then((res) {
+        Get.log("[FCllama] Detokenize Res $res");
       });
     });
   }
@@ -164,7 +163,7 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
 
   @override
   void onInit() {
-    // Fllama.instance()?.getCpuInfo().then((value) {
+    // FCllama.instance()?.getCpuInfo().then((value) {
     //   Get.log("CPU-Info=$value");
     // });
     WidgetsBinding.instance.addObserver(this);
@@ -187,19 +186,19 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     super.onReady();
     final lModel = await IsarDao.instance()
         ?.getLocalModel(mId: StoreKV.instance()?.getSelectModelId() ?? "");
-    Fllama.instance()?.onTokenStream?.listen((data) {
-      if(data['function']=="loadProgress"){
-        Get.log("[FLlama] loadProgress=${data['result']}");
-      }else if(data['function']=="completion"){
-        Get.log("[FLlama] completion=${data['result']}");
+    FCllama.instance()?.onTokenStream?.listen((data) {
+      if (data['function'] == "loadProgress") {
+        Get.log("[FCllama] loadProgress=${data['result']}");
+      } else if (data['function'] == "completion") {
+        Get.log("[FCllama] completion=${data['result']}");
         final tempRes = data["result"]["token"];
         if (tempRes != "User") {
           modelPutout = modelPutout + tempRes;
           _setChatItemInList(
               uName: "gpt", time: chatItemId, content: modelPutout);
         }
-      }else{
-        Get.log("[FLlama]!!! data=$data");
+      } else {
+        Get.log("[FCllama]!!! data=$data");
       }
     });
     if (lModel != null && lModel.lmInfo?.mPath.isNotEmpty == true) {
@@ -210,7 +209,7 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    Fllama.instance()?.releaseAllContexts();
+    FCllama.instance()?.releaseAllContexts();
     addMenuFocusNode.unfocus();
     textFieldHeight.value = 0;
     keyboardHeight.value = 12.0;

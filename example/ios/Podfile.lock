@@ -6,9 +6,9 @@ PODS:
     - FlutterMacOS
   - device_info_plus (0.0.1):
     - Flutter
-  - file_picker (0.0.1):
+  - fcllama (0.0.2):
     - Flutter
-  - fllama (0.0.1):
+  - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - flutter_displaymode (0.0.1):
@@ -39,8 +39,8 @@ DEPENDENCIES:
   - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - fcllama (from `.symlinks/plugins/fcllama/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
-  - fllama (from `.symlinks/plugins/fllama/ios`)
   - Flutter (from `Flutter`)
   - flutter_displaymode (from `.symlinks/plugins/flutter_displaymode/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -64,10 +64,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  fcllama:
+    :path: ".symlinks/plugins/fcllama/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
-  fllama:
-    :path: ".symlinks/plugins/fllama/ios"
   Flutter:
     :path: Flutter
   flutter_displaymode:
@@ -91,8 +91,8 @@ SPEC CHECKSUMS:
   background_downloader: 2f6f22aa1663f7a99a5e915689ebe8cf29e42ddd
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
+  fcllama: 3da140749e2b91522d448c0d5ed7b4ed60edfa6f
   file_picker: 684373a825f14becb5556cf6c5b88610290914b2
-  fllama: d710313cf141f66abe5dc36806263537427ce878
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_displaymode: ecb99eeda1a8b07a1e2cd27e22547f79a39989b2
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
@@ -108,4 +108,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0507989d53dcf86f06ac333f90f09f9faaf2c814
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:fllama_example/db/IsarDao.dart';
-import 'package:fllama_example/utils/MyToast.dart';
-import 'package:fllama_example/utils/StoreKV.dart';
-import 'package:fllama_example/vm/HomeVM.dart';
-import 'package:fllama_example/vm/ModelVM.dart';
+import 'package:fcllama_example/db/IsarDao.dart';
+import 'package:fcllama_example/utils/MyToast.dart';
+import 'package:fcllama_example/utils/StoreKV.dart';
+import 'package:fcllama_example/vm/HomeVM.dart';
+import 'package:fcllama_example/vm/ModelVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -262,7 +262,9 @@ Widget chooseOneModelDialog(
                                                     hVM.chooseModel.value =
                                                         model.lmInfo?.mName ??
                                                             "";
-                                                    hVM.initModel(model.lmInfo?.mPath ?? "");
+                                                    hVM.initModel(
+                                                        model.lmInfo?.mPath ??
+                                                            "");
                                                   }
                                                 },
                                                 icon: Icon(

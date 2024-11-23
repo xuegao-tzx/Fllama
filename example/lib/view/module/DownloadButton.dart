@@ -6,7 +6,7 @@
  * 所有代码均受中国《计算机软件保护条例》保护，侵权必究.
  */
 
-import "package:fllama_example/utils/IconSwitch.dart";
+import "package:fcllama_example/utils/IconSwitch.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:material_symbols_icons/material_symbols_icons.dart";

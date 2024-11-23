@@ -1,11 +1,11 @@
-import 'package:fllama_example/bean/Enum.dart';
-import 'package:fllama_example/utils/DialogUtils.dart';
-import 'package:fllama_example/utils/HorizontalSwipeBack.dart';
-import 'package:fllama_example/utils/MyToast.dart';
-import 'package:fllama_example/utils/SideSheet.dart';
-import 'package:fllama_example/view/widget/ChatDetailWidget.dart';
-import 'package:fllama_example/view/widget/ChatInputWidget.dart';
-import 'package:fllama_example/vm/HomeVM.dart';
+import 'package:fcllama_example/bean/Enum.dart';
+import 'package:fcllama_example/utils/DialogUtils.dart';
+import 'package:fcllama_example/utils/HorizontalSwipeBack.dart';
+import 'package:fcllama_example/utils/MyToast.dart';
+import 'package:fcllama_example/utils/SideSheet.dart';
+import 'package:fcllama_example/view/widget/ChatDetailWidget.dart';
+import 'package:fcllama_example/view/widget/ChatInputWidget.dart';
+import 'package:fcllama_example/vm/HomeVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -96,7 +96,7 @@ class HomeView extends StatelessWidget {
                               ),
                               MenuItemButton(
                                 leadingIcon:
-                                Icon(MenuEntry.about.icon, size: 22),
+                                    Icon(MenuEntry.about.icon, size: 22),
                                 child: Text("testBench"),
                                 onPressed: () async {
                                   Get.log("[FLlama] testBench");
@@ -108,7 +108,7 @@ class HomeView extends StatelessWidget {
                               ),
                               MenuItemButton(
                                 leadingIcon:
-                                Icon(MenuEntry.about.icon, size: 22),
+                                    Icon(MenuEntry.about.icon, size: 22),
                                 child: Text("testTokenize"),
                                 onPressed: () async {
                                   Get.log("[FLlama] testTokenize");

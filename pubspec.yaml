@@ -1,9 +1,9 @@
-name: fllama
-description: "A Flutter binding for llama.cpp."
-version: 0.0.1
+name: fcllama
+description: "A flutter binding for llama.cpp, which use platform channel."
+version: 0.0.3
 repository: https://github.com/xuegao-tzx/fllama
 issue_tracker: https://github.com/xuegao-tzx/fllama/issues
-homepage: https://pub.dev/packages/fllama
+homepage: https://pub.dev/packages/fcllama
 
 platforms:
   android:

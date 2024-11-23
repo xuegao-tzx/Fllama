@@ -1,10 +1,10 @@
-import "package:fllama/fllama_type.dart";
+import "package:fcllama/fllama_type.dart";
 import "package:flutter/services.dart";
 
 import "fllama_platform_interface.dart";
 
-/// An implementation of [FllamaPlatform] that uses method channels.
-class MethodChannelFllama extends FllamaPlatform {
+/// An implementation of [FCllamaPlatform] that uses method channels.
+class MethodChannelFCllama extends FCllamaPlatform {
   /// The method channel used to interact with the native platform.
   final methodChannel = const MethodChannel("fllama");
   final eventChannel = const EventChannel("fllama_event_channel");

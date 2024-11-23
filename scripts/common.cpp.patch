@@ -31,7 +31,7 @@
      int n_cpu = sysconf(_SC_NPROCESSORS_ONLN);
      if (n_cpu < 1) {
          return cpu_get_num_physical_cores();
-@@ -992,7 +998,8 @@
+@@ -998,7 +1004,8 @@
          LM_GGML_ASSERT(params.kv_overrides.back().key[0] == 0 && "KV overrides not terminated with empty key");
          mparams.kv_overrides = params.kv_overrides.data();
      }

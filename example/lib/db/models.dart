@@ -1,4 +1,4 @@
-import 'package:fllama_example/view/module/DownloadButton.dart';
+import 'package:fcllama_example/view/module/DownloadButton.dart';
 import 'package:isar/isar.dart';
 
 part "models.g.dart";

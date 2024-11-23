@@ -50,6 +50,7 @@
 
 #include "sgemm.h"
 #include "ggml-impl.h"
+// hack until moved into the CPU backend
 #include "ggml-cpu-impl.h"
 #include "ggml-quants.h"
 

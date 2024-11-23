@@ -1,5 +1,5 @@
 #!/bin/zsh -e
-# Update time: 2024-11-12 10:34:39
+# Update time: 2024-11-23 11:54:43
 
 # Copyright (c) 2024, Small Grass Forest
 #
@@ -23,26 +23,35 @@ fi
 
 cp ./llama/ggml/include/ggml.h ../ios/Cpp/ggml.h
 cp ./llama/ggml/src/ggml.c ../ios/Cpp/ggml.c
+cp ./llama/ggml/src/ggml-threading.cpp ../ios/Cpp/ggml-threading.cpp
+cp ./llama/ggml/src/ggml-threading.h ../ios/Cpp/ggml-threading.h
 cp ./llama/ggml/include/ggml-metal.h ../ios/Cpp/ggml-metal.h
-cp ./llama/ggml/src/ggml-metal.m ../ios/Cpp/ggml-metal.m
-cp ./llama/ggml/src/ggml-metal.metal ../ios/Cpp/ggml-metal.metal
+cp ./llama/ggml/src/ggml-metal/ggml-metal-impl.h ../ios/Cpp/ggml-metal-impl.h
+cp ./llama/ggml/src/ggml-metal/ggml-metal.m ../ios/Cpp/ggml-metal.m
+cp ./llama/ggml/src/ggml-metal/ggml-metal.metal ../ios/Cpp/ggml-metal.metal
 cp ./llama/ggml/include/ggml-alloc.h ../ios/Cpp/ggml-alloc.h
 cp ./llama/ggml/src/ggml-alloc.c ../ios/Cpp/ggml-alloc.c
 cp ./llama/ggml/include/ggml-backend.h ../ios/Cpp/ggml-backend.h
 cp ./llama/ggml/src/ggml-backend.cpp ../ios/Cpp/ggml-backend.cpp
 cp ./llama/ggml/src/ggml-backend-impl.h ../ios/Cpp/ggml-backend-impl.h
+cp ./llama/ggml/src/ggml-backend-reg.cpp ../ios/Cpp/ggml-backend-reg.cpp
 cp ./llama/ggml/src/ggml-impl.h ../ios/Cpp/ggml-impl.h
 cp ./llama/ggml/src/ggml-common.h ../ios/Cpp/ggml-common.h
 cp ./llama/ggml/src/ggml-quants.h ../ios/Cpp/ggml-quants.h
 cp ./llama/ggml/src/ggml-quants.c ../ios/Cpp/ggml-quants.c
-cp ./llama/ggml/src/llamafile/sgemm.h ../ios/Cpp/sgemm.h
-cp ./llama/ggml/src/llamafile/sgemm.cpp ../ios/Cpp/sgemm.cpp
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu-aarch64.c ../ios/Cpp/ggml-cpu-aarch64.c
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu-aarch64.h ../ios/Cpp/ggml-cpu-aarch64.h
+cp ./llama/ggml/src/ggml-cpu/llamafile/sgemm.h ../ios/Cpp/sgemm.h
+cp ./llama/ggml/src/ggml-cpu/llamafile/sgemm.cpp ../ios/Cpp/sgemm.cpp
 cp ./llama/ggml/src/ggml-aarch64.h ../ios/Cpp/ggml-aarch64.h
 cp ./llama/ggml/src/ggml-aarch64.c ../ios/Cpp/ggml-aarch64.c
-cp ./llama/ggml/src/ggml-cpu.c ../ios/Cpp/ggml-cpu.c
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu.c ../ios/Cpp/ggml-cpu.c
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu.cpp ../ios/Cpp/ggml-cpu.cpp
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu-impl.h ../ios/Cpp/ggml-cpu-impl.h
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu-quants.c ../ios/Cpp/ggml-cpu-quants.c
+cp ./llama/ggml/src/ggml-cpu/ggml-cpu-quants.h ../ios/Cpp/ggml-cpu-quants.h
 cp ./llama/ggml/include/ggml-cpu.h ../ios/Cpp/ggml-cpu.h
 cp ./llama/ggml/include/ggml-cpp.h ../ios/Cpp/ggml-cpp.h
-cp ./llama/ggml/src/ggml-cpu-impl.h ../ios/Cpp/ggml-cpu-impl.h
 cp ./llama/include/llama.h ../ios/Cpp/llama.h
 cp ./llama/src/llama.cpp ../ios/Cpp/llama.cpp
 cp ./llama/src/llama-vocab.cpp ../ios/Cpp/llama-vocab.cpp
@@ -82,6 +91,7 @@ files=(
   "../ios/Cpp/common.h"
   "../ios/Cpp/common.cpp"
   "../ios/Cpp/ggml-metal.h"
+  "../ios/Cpp/ggml-metal-impl.h"
   "../ios/Cpp/ggml-metal.m"
   "../ios/Cpp/ggml-metal.metal"
   "../ios/Cpp/base64.hpp"
@@ -101,14 +111,22 @@ files=(
   "../ios/Cpp/ggml-backend.h"
   "../ios/Cpp/ggml-backend.cpp"
   "../ios/Cpp/ggml-backend-impl.h"
+  "../ios/Cpp/ggml-backend-reg.cpp"
   "../ios/Cpp/ggml-impl.h"
   "../ios/Cpp/ggml-common.h"
   "../ios/Cpp/ggml-cpu.c"
+  "../ios/Cpp/ggml-cpu.cpp"
   "../ios/Cpp/ggml-cpu.h"
   "../ios/Cpp/ggml-cpu-impl.h"
   "../ios/Cpp/ggml-cpp.h"
   "../ios/Cpp/sgemm.cpp"
+  "../ios/Cpp/ggml-threading.h"
+  "../ios/Cpp/ggml-threading.cpp"
   "../ios/Cpp/json-schema-to-grammar.h"
+  "../ios/Cpp/ggml-cpu-aarch64.h"
+  "../ios/Cpp/ggml-cpu-aarch64.c"
+  "../ios/Cpp/ggml-cpu-quants.c"
+  "../ios/Cpp/ggml-cpu-quants.h"
   "../ios/Cpp/ggml-aarch64.h"
   "../ios/Cpp/ggml-aarch64.c"
   "../ios/Cpp/stb_image.h"
@@ -154,20 +172,26 @@ patch -p0 -d ../ios/Cpp < ../scripts/ggml.c.patch
 echo "[Patch] ggml.c ✅ "
 patch -p0 -d ../ios/Cpp < ../scripts/sgemm.cpp.patch
 echo "[Patch] sgemm.cpp ✅ "
+patch -p0 -d ../ios/Cpp < ../scripts/ggml-cpu-aarch64.c.patch
+echo "[Patch] ggml-cpu-aarch64.c ✅ "
+patch -p0 -d ../ios/Cpp < ../scripts/ggml-quants.c.patch
+echo "[Patch] ggml-quants.c ✅ "
+patch -p0 -d ../ios/Cpp < ../scripts/ggml-metal.metal.patch
+echo "[Patch] ggml-metal.metal ✅ "
 
 echo "😊 Apply patch successfully!"
 
 if [ "$OS" = "Darwin" ]; then
   # Build metallib (~1.6MB)
-  cd llama/ggml/src/
+  cd llama/ggml/src/ggml-metal
   xcrun --sdk iphoneos metal -c ggml-metal.metal -o ggml-metal.air
   xcrun --sdk iphoneos metallib ggml-metal.air   -o ggml-llama.metallib
   rm ggml-metal.air
-  cp ./ggml-llama.metallib ../../../../ios/Cpp/ggml-llama.metallib
+  cp ./ggml-llama.metallib ../../../../../ios/Cpp/ggml-llama.metallib
   echo "😊 Build Metallib successfully!"
 fi
 
-cd ../../../../cpp-file
+cd ../../../../../cpp-file
 if [ -e "llama" ];then
   rm -rf "llama"
   echo "😊 Clean temp[llama] successfully!"

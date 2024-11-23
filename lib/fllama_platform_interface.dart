@@ -1,25 +1,25 @@
-import "package:fllama/fllama_type.dart";
+import "package:fcllama/fllama_type.dart";
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
 
 import "fllama_method_channel.dart";
 
-abstract class FllamaPlatform extends PlatformInterface {
-  /// Constructs a FllamaPlatform.
-  FllamaPlatform() : super(token: _token);
+abstract class FCllamaPlatform extends PlatformInterface {
+  /// Constructs a FCllamaPlatform.
+  FCllamaPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static FllamaPlatform _instance = MethodChannelFllama();
+  static FCllamaPlatform _instance = MethodChannelFCllama();
 
-  /// The default instance of [FllamaPlatform] to use.
+  /// The default instance of [FCllamaPlatform] to use.
   ///
-  /// Defaults to [MethodChannelFllama].
-  static FllamaPlatform get instance => _instance;
+  /// Defaults to [MethodChannelFCllama].
+  static FCllamaPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [FllamaPlatform] when
+  /// platform-specific class that extends [FCllamaPlatform] when
   /// they register themselves.
-  static set instance(FllamaPlatform instance) {
+  static set instance(FCllamaPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }

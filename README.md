@@ -1,9 +1,9 @@
-# Fllama
+# FCllama
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![pub package](https://img.shields.io/pub/v/fllama.svg?label=fllama&color=blue)](https://pub.dev/packages/fllama)
+[![pub package](https://img.shields.io/pub/v/fllama.svg?label=fcllama&color=blue)](https://pub.dev/packages/fcllama)
 
-Flutter binding of [llama.cpp](https://github.com/ggerganov/llama.cpp).
+Flutter binding of [llama.cpp](https://github.com/ggerganov/llama.cpp) , which use platform channel .
 
 [llama.cpp](https://github.com/ggerganov/llama.cpp): Inference of [LLaMA](https://arxiv.org/abs/2302.13971) model in pure C/C++
 
@@ -12,7 +12,7 @@ Flutter binding of [llama.cpp](https://github.com/ggerganov/llama.cpp).
 ### Flutter
 
 ```sh
-flutter pub add fllama
+flutter pub add fcllama
 ```
 
 #### iOS
@@ -53,9 +53,9 @@ Or, you can add it to your project manually.
 1. Initializing Llama
 
 ```dart
-import 'package:fllama/fllama.dart';
+import 'package:fcllama/fllama.dart';
 
-Fllama.instance()?.initContext("model path",emitLoadProgress: true)
+FCllama.instance()?.initContext("model path",emitLoadProgress: true)
         .then((context) {
   modelContextId = context?["contextId"].toString() ?? "";
   if (modelContextId.isNotEmpty) {
@@ -67,22 +67,22 @@ Fllama.instance()?.initContext("model path",emitLoadProgress: true)
 2. Bench model on device
 
 ```dart
-import 'package:fllama/fllama.dart';
+import 'package:fcllama/fllama.dart';
 
-Fllama.instance()?.bench(double.parse(modelContextId),pp:8,tg:4,pl:2,nr: 1).then((res){
-  Get.log("[FLlama] Bench Res $res");
+FCllama.instance()?.bench(double.parse(modelContextId),pp:8,tg:4,pl:2,nr: 1).then((res){
+  Get.log("[FCllama] Bench Res $res");
 });
 ```
 
 3. Tokenize and Detokenize
 
 ```dart
-import 'package:fllama/fllama.dart';
+import 'package:fcllama/fllama.dart';
 
-Fllama.instance()?.tokenize(double.parse(modelContextId), text: "What can you do?").then((res){
-  Get.log("[FLlama] Tokenize Res $res");
-  Fllama.instance()?.detokenize(double.parse(modelContextId), tokens: res?['tokens']).then((res){
-    Get.log("[FLlama] Detokenize Res $res");
+FCllama.instance()?.tokenize(double.parse(modelContextId), text: "What can you do?").then((res){
+  Get.log("[FCllama] Tokenize Res $res");
+  FCllama.instance()?.detokenize(double.parse(modelContextId), tokens: res?['tokens']).then((res){
+    Get.log("[FCllama] Detokenize Res $res");
   });
 });
 ```
@@ -90,13 +90,13 @@ Fllama.instance()?.tokenize(double.parse(modelContextId), text: "What can you do
 4. Streaming monitoring
 
 ```dart
-import 'package:fllama/fllama.dart';
+import 'package:fcllama/fllama.dart';
 
-Fllama.instance()?.onTokenStream?.listen((data) {
+FCllama.instance()?.onTokenStream?.listen((data) {
   if(data['function']=="loadProgress"){
-    Get.log("[FLlama] loadProgress=${data['result']}");
+    Get.log("[FCllama] loadProgress=${data['result']}");
   }else if(data['function']=="completion"){
-    Get.log("[FLlama] completion=${data['result']}");
+    Get.log("[FCllama] completion=${data['result']}");
     final tempRes = data["result"]["token"];
     // tempRes is ans
   }
@@ -106,11 +106,11 @@ Fllama.instance()?.onTokenStream?.listen((data) {
 5. Release this or Stop one
 
 ```dart
-import 'package:fllama/fllama.dart';
+import 'package:fcllama/fllama.dart';
 
-Fllama.instance()?.stopCompletion(contextId: double.parse(modelContextId)); // stop one completion
-Fllama.instance()?.releaseContext(double.parse(modelContextId)); // release one
-Fllama.instance()?.releaseAllContexts(); // release all
+FCllama.instance()?.stopCompletion(contextId: double.parse(modelContextId)); // stop one completion
+FCllama.instance()?.releaseContext(double.parse(modelContextId)); // release one
+FCllama.instance()?.releaseAllContexts(); // release all
 ```
 
 ### OpenHarmonyOS/HarmonyOS

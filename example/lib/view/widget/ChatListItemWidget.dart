@@ -1,5 +1,5 @@
-import 'package:fllama_example/db/models.dart';
-import 'package:fllama_example/vm/HomeVM.dart';
+import 'package:fcllama_example/db/models.dart';
+import 'package:fcllama_example/vm/HomeVM.dart';
 import 'package:flutter/material.dart';
 import 'package:fmarkdown/flutter_markdown.dart';
 import 'package:get/get.dart';

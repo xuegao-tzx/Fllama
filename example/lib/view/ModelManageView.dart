@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:fllama_example/bean/Enum.dart';
-import 'package:fllama_example/db/IsarDao.dart';
-import 'package:fllama_example/utils/DialogUtils.dart';
-import 'package:fllama_example/utils/HorizontalSwipeBack.dart';
-import 'package:fllama_example/view/module/ModelListItem.dart';
-import 'package:fllama_example/vm/ModelVM.dart';
+import 'package:fcllama_example/bean/Enum.dart';
+import 'package:fcllama_example/db/IsarDao.dart';
+import 'package:fcllama_example/utils/DialogUtils.dart';
+import 'package:fcllama_example/utils/HorizontalSwipeBack.dart';
+import 'package:fcllama_example/view/module/ModelListItem.dart';
+import 'package:fcllama_example/vm/ModelVM.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

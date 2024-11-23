@@ -1,6 +1,20 @@
 --- sgemm.cpp.orig
 +++ sgemm.cpp
-@@ -206,1 +206,1 @@
+@@ -51,7 +51,7 @@
+ #include "sgemm.h"
+ #include "ggml-impl.h"
+ // hack until moved into the CPU backend
+-#include "../ggml-cpu-impl.h"
++#include "ggml-cpu-impl.h"
+ #include "ggml-quants.h"
+ 
+ #ifdef _MSC_VER
+@@ -204,7 +204,7 @@
+ template <> inline float32x4_t load(const float *p) {
+     return vld1q_f32(p);
+ }
 -#if !defined(_MSC_VER)
 +#if !defined(_MSC_VER) && !defined(__ARM_ARCH_7A__)
-template <> inline float16x8_t load(const lm_ggml_fp16_t *p) {
+ template <> inline float16x8_t load(const lm_ggml_fp16_t *p) {
+     return vld1q_f16((const float16_t *)p);
+ }

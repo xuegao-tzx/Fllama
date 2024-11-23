@@ -1,27 +1,27 @@
-import "package:fllama/fllama_type.dart";
+import "package:fcllama/fllama_type.dart";
 
 import "fllama_platform_interface.dart";
 
-class Fllama {
-  static Fllama? _instance;
+class FCllama {
+  static FCllama? _instance;
 
-  Fllama._();
+  FCllama._();
 
-  static Fllama? instance() {
-    _instance ??= Fllama._();
+  static FCllama? instance() {
+    _instance ??= FCllama._();
     return _instance;
   }
 
   Stream<Map<Object?, dynamic>>? get onTokenStream {
-    return FllamaPlatform.instance.onTokenStream;
+    return FCllamaPlatform.instance.onTokenStream;
   }
 
   Future<String?> getFileSHA256(String fPath) {
-    return FllamaPlatform.instance.getFileSHA256(fPath);
+    return FCllamaPlatform.instance.getFileSHA256(fPath);
   }
 
   Future<Map<Object?, dynamic>?> getCpuInfo() {
-    return FllamaPlatform.instance.getCpuInfo();
+    return FCllamaPlatform.instance.getCpuInfo();
   }
 
   Future<Map<Object?, dynamic>?> initContext(String model,
@@ -38,7 +38,7 @@ class Fllama {
       double ropeFreqScale = 0.0,
       bool loraInitWithoutApply = false,
       bool emitLoadProgress = false}) {
-    return FllamaPlatform.instance.initContext(model,
+    return FCllamaPlatform.instance.initContext(model,
         embedding: embedding,
         nCtx: nCtx,
         nBatch: nBatch,
@@ -56,18 +56,18 @@ class Fllama {
 
   Future<String?> getFormattedChat(double contextId,
       {required List<RoleContent> messages, String? chatTemplate}) {
-    return FllamaPlatform.instance.getFormattedChat(contextId,
+    return FCllamaPlatform.instance.getFormattedChat(contextId,
         messages: messages, chatTemplate: chatTemplate);
   }
 
   Future<Map<Object?, dynamic>?> loadSession(double contextId,
       {required String path}) {
-    return FllamaPlatform.instance.loadSession(contextId, path: path);
+    return FCllamaPlatform.instance.loadSession(contextId, path: path);
   }
 
   Future<int?> saveSession(double contextId,
       {required String path, required double size}) {
-    return FllamaPlatform.instance
+    return FCllamaPlatform.instance
         .saveSession(contextId, path: path, size: size);
   }
 
@@ -95,7 +95,7 @@ class Fllama {
       List<String>? stop,
       bool ignoreEos = false,
       bool emitRealtimeCompletion = false}) {
-    return FllamaPlatform.instance.completion(contextId,
+    return FCllamaPlatform.instance.completion(contextId,
         prompt: prompt,
         logitBias: logitBias,
         grammar: grammar,
@@ -122,16 +122,16 @@ class Fllama {
   }
 
   Future<void> stopCompletion({required double contextId}) {
-    return FllamaPlatform.instance.stopCompletion(contextId);
+    return FCllamaPlatform.instance.stopCompletion(contextId);
   }
 
   Future<Map<Object?, dynamic>?> tokenize(double contextId,
       {required String text}) {
-    return FllamaPlatform.instance.tokenize(contextId, text: text);
+    return FCllamaPlatform.instance.tokenize(contextId, text: text);
   }
 
   Future<String?> detokenize(double contextId, {required List<int> tokens}) {
-    return FllamaPlatform.instance.detokenize(contextId, tokens: tokens);
+    return FCllamaPlatform.instance.detokenize(contextId, tokens: tokens);
   }
 
   Future<String?> bench(double contextId,
@@ -139,15 +139,15 @@ class Fllama {
       required double tg,
       required double pl,
       required double nr}) {
-    return FllamaPlatform.instance
+    return FCllamaPlatform.instance
         .bench(contextId, pp: pp, tg: tg, pl: pl, nr: nr);
   }
 
   Future<void> releaseContext(double contextId) {
-    return FllamaPlatform.instance.releaseContext(contextId);
+    return FCllamaPlatform.instance.releaseContext(contextId);
   }
 
   Future<void> releaseAllContexts() {
-    return FllamaPlatform.instance.releaseAllContexts();
+    return FCllamaPlatform.instance.releaseAllContexts();
   }
 }

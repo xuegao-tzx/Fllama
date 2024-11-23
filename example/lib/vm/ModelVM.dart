@@ -1,8 +1,8 @@
-import 'package:fllama_example/db/IsarDao.dart';
-import 'package:fllama_example/db/models.dart';
-import 'package:fllama_example/net/ApiService.dart';
-import 'package:fllama_example/net/ModelDownloadController.dart';
-import 'package:fllama_example/view/module/DownloadButton.dart';
+import 'package:fcllama_example/db/IsarDao.dart';
+import 'package:fcllama_example/db/models.dart';
+import 'package:fcllama_example/net/ApiService.dart';
+import 'package:fcllama_example/net/ModelDownloadController.dart';
+import 'package:fcllama_example/view/module/DownloadButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +41,8 @@ class ModelVM extends GetxController {
           for (var u = 0; u < tInfo.length; u++) {
             // eg: 【gguf】https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct.Q2_K.gguf
             // eg：【whisper bin】https://hf-mirror.com/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin
-            final tDownloadUrl = "https://${mList[i].sUrl}/resolve/main/${mList[i].mName}${mList[i].ext}${mInfo[u].quantMethod}.gguf";
+            final tDownloadUrl =
+                "https://${mList[i].sUrl}/resolve/main/${mList[i].mName}${mList[i].ext}${mInfo[u].quantMethod}.gguf";
             Get.log(
                 "downloadUrl (i=$i,u=$u) $tDownloadUrl mName=${mList[i].mName}");
             tInfo[u].dController = ModelDownloadController(

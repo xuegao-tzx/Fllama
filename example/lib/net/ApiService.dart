@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:fllama_example/bean/newbean.dart';
-import 'package:fllama_example/net/HttpEngine.dart';
-import 'package:fllama_example/utils/MyToast.dart';
+import 'package:fcllama_example/bean/newbean.dart';
+import 'package:fcllama_example/net/HttpEngine.dart';
+import 'package:fcllama_example/utils/MyToast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
