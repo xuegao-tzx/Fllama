@@ -1,7 +1,7 @@
 # FCllama
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![pub package](https://img.shields.io/pub/v/fllama.svg?label=fcllama&color=blue)](https://pub.dev/packages/fcllama)
+[![pub package](https://img.shields.io/pub/v/fcllama.svg?label=fcllama&color=blue)](https://pub.dev/packages/fcllama)
 
 Flutter binding of [llama.cpp](https://github.com/ggerganov/llama.cpp) , which use platform channel .
 
@@ -21,7 +21,7 @@ Please run `pod install` or `pod update` in your iOS project.
 
 #### Android
 
-You need install cmake 3.31.0、android sdk 35 and ndk 28.0.12433566.
+You need install cmake 3.31.0、android sdk 35 and ndk 28.0.12674087.
 No additional operation required .
 
 ### OpenHarmonyOS/HarmonyOS
@@ -36,7 +36,7 @@ Or, you can add it to your project manually.
 
 ```json
 "dependencies": {
-  "hllama": "^0.0.1",
+  "hllama": "^0.0.2",
 }
 ```
 

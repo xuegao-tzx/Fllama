@@ -30,7 +30,7 @@ Or, you can add it to your project manually.
 
   ```json
   "dependencies": {
-      "hllama": "^0.0.1",
+      "hllama": "^0.0.2",
   }
   ```
   
