@@ -91,8 +91,8 @@ SPEC CHECKSUMS:
   background_downloader: 2f6f22aa1663f7a99a5e915689ebe8cf29e42ddd
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
-  fcllama: 3da140749e2b91522d448c0d5ed7b4ed60edfa6f
-  file_picker: 684373a825f14becb5556cf6c5b88610290914b2
+  fcllama: cd02f19cf4ce9563892b3a550157e21f72e5bb45
+  file_picker: c79185e70b9b45728cde2a8d8da454e0cb43f287
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_displaymode: ecb99eeda1a8b07a1e2cd27e22547f79a39989b2
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
@@ -106,6 +106,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: 0507989d53dcf86f06ac333f90f09f9faaf2c814
+PODFILE CHECKSUM: 3af185db6553baf9343488dcbd5236e8119a9063
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
