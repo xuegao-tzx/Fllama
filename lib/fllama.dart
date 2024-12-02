@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:fcllama/fllama_type.dart";
 
 import "fllama_platform_interface.dart";
@@ -38,20 +40,24 @@ class FCllama {
       double ropeFreqScale = 0.0,
       bool loraInitWithoutApply = false,
       bool emitLoadProgress = false}) {
-    return FCllamaPlatform.instance.initContext(model,
-        embedding: embedding,
-        nCtx: nCtx,
-        nBatch: nBatch,
-        nThreads: nThreads,
-        nGpuLayers: nGpuLayers,
-        useMlock: useMlock,
-        useMmap: useMmap,
-        lora: lora,
-        loraScaled: loraScaled,
-        loraInitWithoutApply: loraInitWithoutApply,
-        ropeFreqBase: ropeFreqBase,
-        ropeFreqScale: ropeFreqScale,
-        emitLoadProgress: emitLoadProgress);
+    if(File(model).existsSync()) {
+      return FCllamaPlatform.instance.initContext(model,
+          embedding: embedding,
+          nCtx: nCtx,
+          nBatch: nBatch,
+          nThreads: nThreads,
+          nGpuLayers: nGpuLayers,
+          useMlock: useMlock,
+          useMmap: useMmap,
+          lora: lora,
+          loraScaled: loraScaled,
+          loraInitWithoutApply: loraInitWithoutApply,
+          ropeFreqBase: ropeFreqBase,
+          ropeFreqScale: ropeFreqScale,
+          emitLoadProgress: emitLoadProgress);
+    }else{
+      throw ArgumentError("Model not found !");
+    }
   }
 
   Future<String?> getFormattedChat(double contextId,

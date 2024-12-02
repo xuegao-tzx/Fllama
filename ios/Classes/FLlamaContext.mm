@@ -12,7 +12,7 @@
     NSString *modelPath = params[@"model"];
     BOOL isAsset = [params[@"is_model_asset"] boolValue];
     NSString *path = modelPath;
-
+    
     if (isAsset) {
         path = [[NSBundle mainBundle] pathForResource:modelPath ofType:nil];
     }
@@ -76,8 +76,10 @@
     if (params[@"lora_init_without_apply"]) {
         defaultParams.lora_init_without_apply = [params[@"lora_init_without_apply"] boolValue];
     }
-
-    if (params[@"lora"]) {
+    
+    if (params[@"lora"]  &&
+        [params[@"lora"] isKindOfClass:[NSString class]] &&
+        [params[@"lora"] length] > 0) {
         float lora_scaled = 1.0f;
 
         if (params[@"lora_scaled"]) {
@@ -112,7 +114,7 @@
     context->llama->loading_progress = 0;
     context->onProgress = onProgress;
 
-    if (params[@"use_progress_callback"] && [params[@"use_progress_callback"] boolValue]) {
+//    if (params[@"use_progress_callback"] && [params[@"use_progress_callback"] boolValue]) {
         defaultParams.progress_callback = [](float progress, void * user_data) {
             FLlamaContext *context = (__bridge FLlamaContext *)(user_data);
             unsigned percentage = (unsigned) (100 * progress);
@@ -123,7 +125,7 @@
             return !context->llama->is_load_interrupted;
         };
         defaultParams.progress_callback_user_data = context;
-    }
+//    }
 
     context->is_model_loaded = context->llama->loadModel(defaultParams);
     context->is_metal_enabled = isMetalEnabled;

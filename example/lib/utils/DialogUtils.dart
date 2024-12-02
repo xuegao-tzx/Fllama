@@ -109,7 +109,7 @@ Widget addModelDialog({required BuildContext context, required ModelVM mVM}) {
                                       ? await getApplicationSupportDirectory()
                                       : await getLibraryDirectory();
                               final mFPath =
-                                  "${libraryDirectory.path}/model/${mVM.textController.text}.gguf";
+                                  "${libraryDirectory.path}/${mVM.textController.text}.gguf";
                               await file.rename(mFPath);
                               mVM.localModelPath.value = mFPath;
                             } else {

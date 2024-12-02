@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fcllama/fllama.dart';
 import 'package:fcllama_example/db/IsarDao.dart';
 import 'package:fcllama_example/db/models.dart';
@@ -5,6 +7,7 @@ import 'package:fcllama_example/utils/MyToast.dart';
 import 'package:fcllama_example/utils/StoreKV.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomeVM extends GetxController with WidgetsBindingObserver {
   final FocusNode addMenuFocusNode = FocusNode();
@@ -119,7 +122,7 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
 
   void initModel(String mPath) {
     FCllama.instance()
-        ?.initContext(mPath, emitLoadProgress: true)
+        ?.initContext(mPath, emitLoadProgress: false)
         .then((context) {
       Get.log("[FCllama] initContext Done $context");
       modelContextId = context?["contextId"].toString() ?? "";
@@ -203,7 +206,11 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     });
     if (lModel != null && lModel.lmInfo?.mPath.isNotEmpty == true) {
       Get.log("[Path]= ${lModel.lmInfo?.mPath}");
-      initModel(lModel.lmInfo?.mPath ?? "");
+      final Directory libraryDirectory = Platform.isAndroid
+          ? await getApplicationSupportDirectory()
+          : await getLibraryDirectory();
+      final mFPath = "${libraryDirectory.path}/model1.gguf";
+      initModel(mFPath);//lModel.lmInfo?.mPath ?? "");
     }
   }
 

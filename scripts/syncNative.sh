@@ -1,5 +1,5 @@
 #!/bin/zsh -e
-# Update time: 2024-11-23 11:54:43
+# Update time: 2024-12-02 10:57:15
 
 # Copyright (c) 2024, Small Grass Forest
 #
@@ -178,6 +178,8 @@ patch -p0 -d ../ios/Cpp < ../scripts/ggml-quants.c.patch
 echo "[Patch] ggml-quants.c ✅ "
 patch -p0 -d ../ios/Cpp < ../scripts/ggml-metal.metal.patch
 echo "[Patch] ggml-metal.metal ✅ "
+patch -p0 -d ../ios/Cpp < ../scripts/ggml-backend-reg.cpp.patch
+echo "[Patch] ggml-backend-reg.cpp ✅ "
 
 echo "😊 Apply patch successfully!"
 

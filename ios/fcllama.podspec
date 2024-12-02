@@ -23,7 +23,7 @@ A new Flutter plugin project.
      "ENABLE_BITCODE" => "NO",
      "DEFINES_MODULE" => "YES",
      "LDPLUSPLUSFLAGS" => "-flto",
-     "OTHER_LDFLAGS" => "-flto=thin -framework Accelerate -framework Foundation -framework Metal -framework MetalKit -framework AVFoundation -framework AudioToolbox -lc++",
+     "OTHER_LDFLAGS" => "-flto=thin -framework Accelerate -framework Foundation -framework Metal -framework MetalKit -lc++",
      "CLANG_CXX_LIBRARY" => "libc++",
      "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
      "OTHER_CFLAGS" => "-O3 -DNDEBUG -funroll-loops -fomit-frame-pointer -fvisibility-inlines-hidden -ffunction-sections -fdata-sections",
