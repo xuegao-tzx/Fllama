@@ -1,6 +1,6 @@
 --- common.h.orig
 +++ common.h
-@@ -40,6 +40,17 @@
+@@ -42,6 +42,17 @@
  extern char const * LLAMA_BUILD_TARGET;
 
  struct common_control_vector_load_info;
@@ -18,7 +18,7 @@
 
  //
  // CPU utils
-@@ -270,6 +281,9 @@
+@@ -285,6 +296,9 @@
      bool warmup            = true;  // warmup run
      bool check_tensors     = false; // validate tensor data
 

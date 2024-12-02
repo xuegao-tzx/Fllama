@@ -206,11 +206,14 @@ class HomeVM extends GetxController with WidgetsBindingObserver {
     });
     if (lModel != null && lModel.lmInfo?.mPath.isNotEmpty == true) {
       Get.log("[Path]= ${lModel.lmInfo?.mPath}");
-      final Directory libraryDirectory = Platform.isAndroid
-          ? await getApplicationSupportDirectory()
-          : await getLibraryDirectory();
-      final mFPath = "${libraryDirectory.path}/model1.gguf";
-      initModel(mFPath);//lModel.lmInfo?.mPath ?? "");
+      if(Platform.isAndroid){
+        initModel(lModel.lmInfo?.mPath ?? "");
+      }else{
+        // todo: ios's path ！
+        final Directory libraryDirectory = await getLibraryDirectory();
+        final mFPath = "${libraryDirectory.path}/${chooseModel.value}.gguf";
+        initModel(mFPath);
+      }
     }
   }
 

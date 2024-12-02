@@ -13,6 +13,8 @@ set(
         ${FLLAMA_LIB_DIR}/ggml-backend.cpp
         ${FLLAMA_LIB_DIR}/ggml-backend-reg.cpp
         ${FLLAMA_LIB_DIR}/ggml.c
+        ${FLLAMA_LIB_DIR}/mmq.cpp
+        ${FLLAMA_LIB_DIR}/amx.cpp
         ${FLLAMA_LIB_DIR}/ggml-cpu.c
         ${FLLAMA_LIB_DIR}/ggml-cpu.cpp
         ${FLLAMA_LIB_DIR}/ggml-cpu-quants.c

@@ -190,7 +190,7 @@ enum llm_arch {
     LLM_ARCH_COMMAND_R,
     LLM_ARCH_DBRX,
     LLM_ARCH_OLMO,
-    LLM_ARCH_OLMO_1124,
+    LLM_ARCH_OLMO2,
     LLM_ARCH_OLMOE,
     LLM_ARCH_OPENELM,
     LLM_ARCH_ARCTIC,
@@ -244,7 +244,7 @@ static const std::map<llm_arch, const char *> LLM_ARCH_NAMES = {
     { LLM_ARCH_COMMAND_R,       "command-r"    },
     { LLM_ARCH_DBRX,            "dbrx"         },
     { LLM_ARCH_OLMO,            "olmo"         },
-    { LLM_ARCH_OLMO_1124,       "olmo_1124"    },
+    { LLM_ARCH_OLMO2,           "olmo2"        },
     { LLM_ARCH_OLMOE,           "olmoe"        },
     { LLM_ARCH_OPENELM,         "openelm"      },
     { LLM_ARCH_ARCTIC,          "arctic"       },
@@ -1221,7 +1221,7 @@ static const std::map<llm_arch, std::map<llm_tensor, const char *>> LLM_TENSOR_N
         },
     },
     {
-        LLM_ARCH_OLMO_1124,
+        LLM_ARCH_OLMO2,
         {
             { LLM_TENSOR_TOKEN_EMBD,      "token_embd" },
             { LLM_TENSOR_OUTPUT_NORM,     "output_norm" },
@@ -2352,6 +2352,7 @@ enum e_model {
     MODEL_16B,
     MODEL_20B,
     MODEL_30B,
+    MODEL_32B,
     MODEL_34B,
     MODEL_35B,
     MODEL_40B,
@@ -4877,7 +4878,9 @@ struct llama_model_loader {
             mappings.reserve(files.size());
             mmaps_used.reserve(files.size());
             for (const auto & file : files) {
-                std::unique_ptr<llama_mmap> mapping(new llama_mmap(file.get(), prefetch ? -1 : 0, lm_ggml_is_numa()));
+                auto * reg = lm_ggml_backend_dev_backend_reg(lm_ggml_backend_dev_by_type(LM_GGML_BACKEND_DEVICE_TYPE_CPU));
+                auto * is_numa_fn = (decltype(lm_ggml_is_numa) *) lm_ggml_backend_reg_get_proc_address(reg, "lm_ggml_backend_cpu_is_numa");
+                std::unique_ptr<llama_mmap> mapping(new llama_mmap(file.get(), prefetch ? -1 : 0, is_numa_fn()));
                 mmaps_used.emplace_back(mapping->size, 0);
                 if (mlock_mmaps) {
                     std::unique_ptr<llama_mlock> mlock_mmap(new llama_mlock());
@@ -5339,6 +5342,7 @@ static const char * llama_model_type_name(e_model type) {
         case MODEL_16B:           return "16B";
         case MODEL_20B:           return "20B";
         case MODEL_30B:           return "30B";
+        case MODEL_32B:           return "32B";
         case MODEL_34B:           return "34B";
         case MODEL_35B:           return "35B";
         case MODEL_40B:           return "40B";
@@ -5699,7 +5703,10 @@ static void llm_load_hparams(
                     case 24: model.type = hparams.n_embd == 1024 ? e_model::MODEL_0_5B : e_model::MODEL_1B; break;
                     case 28: model.type = hparams.n_embd == 1536 ? e_model::MODEL_1_5B : e_model::MODEL_7B; break;
                     case 32: model.type = e_model::MODEL_7B; break;
+                    case 36: model.type = e_model::MODEL_3B; break;
                     case 40: model.type = hparams.n_head() == 20 ? e_model::MODEL_4B : e_model::MODEL_13B; break;
+                    case 48: model.type = e_model::MODEL_14B; break;
+                    case 64: model.type = e_model::MODEL_32B; break;
                     case 80: model.type = e_model::MODEL_70B; break;
                     default: model.type = e_model::MODEL_UNKNOWN;
                 }
@@ -5909,7 +5916,7 @@ static void llm_load_hparams(
                     default: model.type = e_model::MODEL_UNKNOWN;
                 }
             } break;
-        case LLM_ARCH_OLMO_1124:
+        case LLM_ARCH_OLMO2:
             {
                 ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
 
@@ -7192,12 +7199,12 @@ static bool weight_buft_supported(const llama_hparams & hparams, lm_ggml_tensor 
             } break;
         case LM_GGML_OP_ADD:
             {
-                lm_ggml_tensor * a = lm_ggml_new_tensor_2d(ctx, LM_GGML_TYPE_F32, w->ne[0], 512);
+                lm_ggml_tensor * a = lm_ggml_new_tensor_4d(ctx, LM_GGML_TYPE_F32, w->ne[0], w->ne[1], w->ne[2], w->ne[3]);
                 op_tensor = lm_ggml_add(ctx, a, w);
             } break;
         case LM_GGML_OP_MUL:
             {
-                lm_ggml_tensor * a = lm_ggml_new_tensor_2d(ctx, LM_GGML_TYPE_F32, w->ne[0], 512);
+                lm_ggml_tensor * a = lm_ggml_new_tensor_4d(ctx, LM_GGML_TYPE_F32, w->ne[0], w->ne[1], w->ne[2], w->ne[3]);
                 op_tensor = lm_ggml_mul(ctx, a, w);
             } break;
         case LM_GGML_OP_DIV:
@@ -8602,7 +8609,7 @@ static bool llm_load_tensors(
                         layer.ffn_up   = create_tensor(tn(LLM_TENSOR_FFN_UP,   "weight", i), {n_embd,   n_ff}, 0);
                     }
                 } break;
-            case LLM_ARCH_OLMO_1124:
+            case LLM_ARCH_OLMO2:
                 {
                     model.tok_embd = create_tensor(tn(LLM_TENSOR_TOKEN_EMBD, "weight"), {n_embd, n_vocab}, 0);
 
@@ -9201,7 +9208,7 @@ static bool llm_load_tensors(
         lm_ggml_backend_dev_t dev = lm_ggml_backend_buft_get_device(buft);
         if (!dev) {
             // FIXME: workaround for CPU backend buft having a NULL device
-            dev = lm_ggml_backend_reg_dev_get(lm_ggml_backend_cpu_reg(), 0);
+            dev = lm_ggml_backend_dev_by_type(LM_GGML_BACKEND_DEVICE_TYPE_CPU);
         }
         lm_ggml_backend_dev_props props;
         lm_ggml_backend_dev_get_props(dev, &props);
@@ -14492,7 +14499,7 @@ struct llm_build_context {
         return gf;
     }
 
-    struct lm_ggml_cgraph * build_olmo_1124() {
+    struct lm_ggml_cgraph * build_olmo2() {
         struct lm_ggml_cgraph * gf = lm_ggml_new_graph_custom(ctx0, llama_model_max_nodes(model), false);
 
         // mutable variable, needed during the last layer of the computation to skip unused tokens
@@ -16808,9 +16815,9 @@ static struct lm_ggml_cgraph * llama_build_graph(
             {
                 result = llm.build_olmo();
             } break;
-        case LLM_ARCH_OLMO_1124:
+        case LLM_ARCH_OLMO2:
             {
-                result = llm.build_olmo_1124();
+                result = llm.build_olmo2();
             } break;
         case LLM_ARCH_OLMOE:
             {
@@ -17454,8 +17461,9 @@ static enum lm_ggml_status llama_graph_compute(
                     int   n_threads,
         lm_ggml_threadpool * threadpool) {
     if (lctx.backend_cpu != nullptr) {
-        lm_ggml_backend_cpu_set_threadpool(lctx.backend_cpu, threadpool);
-        lm_ggml_backend_cpu_set_abort_callback(lctx.backend_cpu, lctx.abort_callback, lctx.abort_callback_data);
+        auto * reg = lm_ggml_backend_dev_backend_reg(lm_ggml_backend_get_device(lctx.backend_cpu));
+        auto * set_threadpool_fn = (decltype(lm_ggml_backend_cpu_set_threadpool) *) lm_ggml_backend_reg_get_proc_address(reg, "lm_ggml_backend_cpu_set_threadpool");
+        set_threadpool_fn(lctx.backend_cpu, threadpool);
     }
 
     // set the number of threads for all the backends
@@ -19372,6 +19380,7 @@ void llama_lora_adapter_free(struct llama_lora_adapter * adapter) {
 //
 struct llama_model_params llama_model_default_params() {
     struct llama_model_params result = {
+        /*.devices                     =*/ nullptr,
         /*.n_gpu_layers                =*/ 0,
         /*.split_mode                  =*/ LLAMA_SPLIT_MODE_LAYER,
         /*.main_gpu                    =*/ 0,
@@ -19489,7 +19498,11 @@ void llama_backend_init(void) {
 
 void llama_numa_init(enum lm_ggml_numa_strategy numa) {
     if (numa != LM_GGML_NUMA_STRATEGY_DISABLED) {
-        lm_ggml_numa_init(numa);
+        auto * dev = lm_ggml_backend_dev_by_type(LM_GGML_BACKEND_DEVICE_TYPE_CPU);
+        LM_GGML_ASSERT(dev && "CPU backend is not loaded");
+        auto * reg = lm_ggml_backend_dev_backend_reg(dev);
+        auto * numa_init_fn = (decltype(lm_ggml_numa_init) *) lm_ggml_backend_reg_get_proc_address(reg, "lm_ggml_backend_cpu_numa_init");
+        numa_init_fn(numa);
     }
 }
 
@@ -19580,19 +19593,24 @@ struct llama_model * llama_load_model_from_file(
     }
 
     // create list of devices to use with this model
-    // currently, we use all available devices
-    // TODO: rework API to give user more control over device selection
-    for (size_t i = 0; i < lm_ggml_backend_dev_count(); ++i) {
-        lm_ggml_backend_dev_t dev = lm_ggml_backend_dev_get(i);
-        switch (lm_ggml_backend_dev_type(dev)) {
-            case LM_GGML_BACKEND_DEVICE_TYPE_CPU:
-            case LM_GGML_BACKEND_DEVICE_TYPE_ACCEL:
-                // skip CPU backends since they are handled separately
-                break;
+    if (params.devices) {
+        for (lm_ggml_backend_dev_t * dev = params.devices; *dev; ++dev) {
+            model->devices.push_back(*dev);
+        }
+    } else {
+        // use all available devices
+        for (size_t i = 0; i < lm_ggml_backend_dev_count(); ++i) {
+            lm_ggml_backend_dev_t dev = lm_ggml_backend_dev_get(i);
+            switch (lm_ggml_backend_dev_type(dev)) {
+                case LM_GGML_BACKEND_DEVICE_TYPE_CPU:
+                case LM_GGML_BACKEND_DEVICE_TYPE_ACCEL:
+                    // skip CPU backends since they are handled separately
+                    break;
 
-            case LM_GGML_BACKEND_DEVICE_TYPE_GPU:
-                model->devices.push_back(dev);
-                break;
+                case LM_GGML_BACKEND_DEVICE_TYPE_GPU:
+                    model->devices.push_back(dev);
+                    break;
+            }
         }
     }
 
@@ -19763,9 +19781,6 @@ struct llama_context * llama_new_context_with_model(
                 __func__, n_ctx_per_seq, hparams.n_ctx_train);
     }
 
-    ctx->abort_callback      = params.abort_callback;
-    ctx->abort_callback_data = params.abort_callback_data;
-
     ctx->logits_all = params.logits_all;
 
     // build worst-case graph for encoder if a model contains encoder
@@ -19814,7 +19829,7 @@ struct llama_context * llama_new_context_with_model(
         }
 
         // add CPU backend
-        ctx->backend_cpu = lm_ggml_backend_cpu_init();
+        ctx->backend_cpu = lm_ggml_backend_init_by_type(LM_GGML_BACKEND_DEVICE_TYPE_CPU, nullptr);
         if (ctx->backend_cpu == nullptr) {
             LLAMA_LOG_ERROR("%s: failed to initialize CPU backend\n", __func__);
             llama_free(ctx);
@@ -19833,6 +19848,8 @@ struct llama_context * llama_new_context_with_model(
                 }
             }
         }
+
+        llama_set_abort_callback(ctx, params.abort_callback, params.abort_callback_data);
 
         if (!llama_kv_cache_init(ctx->kv_self, ctx, type_k, type_v, kv_size, cparams.offload_kqv)) {
             LLAMA_LOG_ERROR("%s: llama_kv_cache_init() failed for self-attention cache\n", __func__);
@@ -19879,7 +19896,8 @@ struct llama_context * llama_new_context_with_model(
             std::vector<lm_ggml_backend_t> backend_ptrs;
             for (auto & backend : ctx->backends) {
                 auto * buft = lm_ggml_backend_get_default_buffer_type(backend.get());
-                if (lm_ggml_backend_is_cpu(backend.get()) && !model->devices.empty()) {
+                auto backend_type = lm_ggml_backend_dev_type(lm_ggml_backend_get_device(backend.get()));
+                if (backend_type == LM_GGML_BACKEND_DEVICE_TYPE_CPU && !model->devices.empty()) {
                     // use the host buffer of the first device CPU for faster transfer of the intermediate state
                     auto * dev = model->devices[0];
                     auto * host_buft = lm_ggml_backend_dev_host_buffer_type(dev);
@@ -19907,7 +19925,8 @@ struct llama_context * llama_new_context_with_model(
             // pipeline parallelism requires support for async compute and events in all devices
             if (pipeline_parallel) {
                 for (auto & backend : ctx->backends) {
-                    if (lm_ggml_backend_is_cpu(backend.get())) {
+                    auto dev_type = lm_ggml_backend_dev_type(lm_ggml_backend_get_device(backend.get()));
+                    if (dev_type == LM_GGML_BACKEND_DEVICE_TYPE_CPU) {
                         // ignore CPU backend
                         continue;
                     }
@@ -20081,7 +20100,7 @@ enum llama_rope_type llama_rope_type(const struct llama_model * model) {
         case LLM_ARCH_QWEN:
         case LLM_ARCH_QWEN2:
         case LLM_ARCH_QWEN2MOE:
-        case LLM_ARCH_OLMO_1124:
+        case LLM_ARCH_OLMO2:
         case LLM_ARCH_OLMOE:
         case LLM_ARCH_PHI2:
         case LLM_ARCH_PHI3:
@@ -21461,6 +21480,14 @@ int32_t llama_n_threads_batch(struct llama_context * ctx) {
 void llama_set_abort_callback(struct llama_context * ctx, bool (*abort_callback)(void * data), void * abort_callback_data) {
     ctx->abort_callback      = abort_callback;
     ctx->abort_callback_data = abort_callback_data;
+
+    for (auto & backend : ctx->backends) {
+        auto * reg = lm_ggml_backend_dev_backend_reg(lm_ggml_backend_get_device(backend.get()));
+        auto * set_abort_callback_fn = (lm_ggml_backend_set_abort_callback_t) lm_ggml_backend_reg_get_proc_address(reg, "lm_ggml_backend_set_abort_callback");
+        if (set_abort_callback_fn) {
+            set_abort_callback_fn(backend.get(), ctx->abort_callback, ctx->abort_callback_data);
+        }
+    }
 }
 
 void llama_set_embeddings(struct llama_context * ctx, bool embeddings) {
@@ -21846,41 +21873,85 @@ static int32_t llama_chat_apply_template_internal(
         if (add_ass) {
             ss << "<|im_start|>assistant\n";
         }
-    } else if (tmpl == "llama2" || tmpl == "mistral" || tmpl_contains("[INST]")) {
-        // llama2 template and its variants
-        // [variant] support system message
-        bool support_system_message = tmpl_contains("<<SYS>>") || tmpl == "mistral";
-        // [variant] space before + after response
-        bool space_around_response = tmpl_contains("' ' + eos_token");
-        // [variant] add BOS inside history
-        bool add_bos_inside_history = tmpl_contains("bos_token + '[INST]");
-        // [variant] trim spaces from the input message
-        bool strip_message = tmpl_contains("content.strip()");
-        // construct the prompt
-        bool is_inside_turn = true; // skip BOS at the beginning
-        ss << "[INST] ";
-        for (auto message : chat) {
-            std::string content = strip_message ? trim(message->content) : message->content;
-            std::string role(message->role);
-            if (!is_inside_turn) {
-                is_inside_turn = true;
-                ss << (add_bos_inside_history ? "<s>[INST] " : "[INST] ");
-            }
-            if (role == "system") {
-                if (support_system_message) {
-                    ss << "<<SYS>>\n" << content << "\n<</SYS>>\n\n";
-                } else {
-                    // if the model does not support system message, we still include it in the first message, but without <<SYS>>
-                    ss << content << "\n";
+    } else if (tmpl == "llama2" || tmpl.find("mistral") == 0 || tmpl_contains("[INST]")) {
+        if (tmpl == "mistral-v7" || tmpl_contains("[SYSTEM_PROMPT]")) {
+            // Official mistral 'v7' template
+            // See: https://huggingface.co/mistralai/Mistral-Large-Instruct-2411#basic-instruct-template-v7
+            for (auto message : chat) {
+                std::string role(message->role);
+                std::string content(message->content);
+                if (role == "system") {
+                    ss << "[SYSTEM_PROMPT] " << content << "[/SYSTEM_PROMPT]";
+                } else if (role == "user") {
+                    ss << "[INST] " << content << "[/INST]";
                 }
-            } else if (role == "user") {
-                ss << content << " [/INST]";
-            } else {
-                ss << (space_around_response ? " " : "") << content << (space_around_response ? " " : "") << "</s>";
-                is_inside_turn = false;
+                else {
+                    ss << " " << content << "</s>";
+                }
             }
+        } else if (tmpl == "mistral-v1" || tmpl == "mistral-v3" || tmpl == "mistral-v3-tekken"
+                   || tmpl_contains("' [INST] ' + system_message") // catches official 'v1' template
+                   || tmpl_contains("[AVAILABLE_TOOLS]")) {        // catches official 'v3' and 'v3-tekken' templates
+            // Official mistral 'v1', 'v3' and 'v3-tekken' templates
+            // See: https://github.com/mistralai/cookbook/blob/main/concept-deep-dive/tokenization/chat_templates.md
+            // See: https://github.com/mistralai/cookbook/blob/main/concept-deep-dive/tokenization/templates.md
+            std::string leading_space = (tmpl == "mistral-v1" || tmpl_contains(" [INST]") ? " " : "");
+            std::string trailing_space = (tmpl == "mistral-v3-tekken" || tmpl_contains("\"[INST]\"") ? "" : " ");
+            bool trim_assistant_message = tmpl_contains("|trim + eos_token");
+            bool is_inside_turn = false;
+            for (auto message : chat) {
+                if (!is_inside_turn) {
+                    ss << leading_space << "[INST]" << trailing_space;
+                    is_inside_turn = true;
+                }
+                std::string role(message->role);
+                std::string content(message->content);
+                if (role == "system") {
+                    ss << content << "\n\n";
+                } else if (role == "user") {
+                    ss << content << leading_space << "[/INST]";
+                } else {
+                    ss << trailing_space << (trim_assistant_message ? trim(content) : content) << "</s>";
+                    is_inside_turn = false;
+                }
+            }
+        } else {
+            // llama2 template and its variants
+            // [variant] support system message
+            // See: https://huggingface.co/blog/llama2#how-to-prompt-llama-2
+            bool support_system_message = tmpl_contains("<<SYS>>") || tmpl == "llama2";
+            // [variant] space before + after response
+            bool space_around_response = tmpl_contains("' ' + eos_token");
+            // [variant] add BOS inside history
+            bool add_bos_inside_history = tmpl_contains("bos_token + '[INST]");
+            // [variant] trim spaces from the input message
+            bool strip_message = tmpl_contains("content.strip()");
+            // construct the prompt
+            bool is_inside_turn = true; // skip BOS at the beginning
+            ss << "[INST] ";
+            for (auto message : chat) {
+                std::string content = strip_message ? trim(message->content) : message->content;
+                std::string role(message->role);
+                if (!is_inside_turn) {
+                    is_inside_turn = true;
+                    ss << (add_bos_inside_history ? "<s>[INST] " : "[INST] ");
+                }
+                if (role == "system") {
+                    if (support_system_message) {
+                        ss << "<<SYS>>\n" << content << "\n<</SYS>>\n\n";
+                    } else {
+                        // if the model does not support system message, we still include it in the first message, but without <<SYS>>
+                        ss << content << "\n";
+                    }
+                } else if (role == "user") {
+                    ss << content << " [/INST]";
+                } else {
+                    ss << (space_around_response ? " " : "") << content << (space_around_response ? " " : "") << "</s>";
+                    is_inside_turn = false;
+                }
+            }
+            // llama2 templates seem to not care about "add_generation_prompt
         }
-        // llama2 templates seem to not care about "add_generation_prompt"
     } else if (tmpl == "phi3" || (tmpl_contains("<|assistant|>") && tmpl_contains("<|end|>"))) {
         // Phi 3
         for (auto message : chat) {
@@ -22202,32 +22273,23 @@ int llama_split_prefix(char * dest, size_t maxlen, const char * split_path, int 
 }
 
 const char * llama_print_system_info(void) {
-    lm_ggml_cpu_init(); // some ARM features are detected at runtime
-
     static std::string s;
 
-    s  = "";
-    s += "AVX = "         + std::to_string(lm_ggml_cpu_has_avx())         + " | ";
-    s += "AVX_VNNI = "    + std::to_string(lm_ggml_cpu_has_avx_vnni())    + " | ";
-    s += "AVX2 = "        + std::to_string(lm_ggml_cpu_has_avx2())        + " | ";
-    s += "AVX512 = "      + std::to_string(lm_ggml_cpu_has_avx512())      + " | ";
-    s += "AVX512_VBMI = " + std::to_string(lm_ggml_cpu_has_avx512_vbmi()) + " | ";
-    s += "AVX512_VNNI = " + std::to_string(lm_ggml_cpu_has_avx512_vnni()) + " | ";
-    s += "AVX512_BF16 = " + std::to_string(lm_ggml_cpu_has_avx512_bf16()) + " | ";
-    s += "AMX_INT8 = "    + std::to_string(lm_ggml_cpu_has_amx_int8())    + " | ";
-    s += "FMA = "         + std::to_string(lm_ggml_cpu_has_fma())         + " | ";
-    s += "NEON = "        + std::to_string(lm_ggml_cpu_has_neon())        + " | ";
-    s += "SVE = "         + std::to_string(lm_ggml_cpu_has_sve())         + " | ";
-    s += "ARM_FMA = "     + std::to_string(lm_ggml_cpu_has_arm_fma())     + " | ";
-    s += "F16C = "        + std::to_string(lm_ggml_cpu_has_f16c())        + " | ";
-    s += "FP16_VA = "     + std::to_string(lm_ggml_cpu_has_fp16_va())     + " | ";
-    s += "RISCV_VECT = "  + std::to_string(lm_ggml_cpu_has_riscv_v())     + " | ";
-    s += "WASM_SIMD = "   + std::to_string(lm_ggml_cpu_has_wasm_simd())   + " | ";
-    s += "SSE3 = "        + std::to_string(lm_ggml_cpu_has_sse3())        + " | ";
-    s += "SSSE3 = "       + std::to_string(lm_ggml_cpu_has_ssse3())       + " | ";
-    s += "VSX = "         + std::to_string(lm_ggml_cpu_has_vsx())         + " | ";
-    s += "MATMUL_INT8 = " + std::to_string(lm_ggml_cpu_has_matmul_int8()) + " | ";
-    s += "LLAMAFILE = "   + std::to_string(lm_ggml_cpu_has_llamafile())   + " | ";
+    for (size_t i = 0; i < lm_ggml_backend_reg_count(); i++) {
+        auto * reg = lm_ggml_backend_reg_get(i);
+        auto * get_features_fn = (lm_ggml_backend_get_features_t) lm_ggml_backend_reg_get_proc_address(reg, "lm_ggml_backend_get_features");
+        if (get_features_fn) {
+            lm_ggml_backend_feature * features = get_features_fn(reg);
+            s += lm_ggml_backend_reg_name(reg);
+            s += " : ";
+            for (; features->name; features++) {
+                s += features->name;
+                s += " = ";
+                s += features->value;
+                s += " | ";
+            }
+        }
+    }
 
     return s.c_str();
 }

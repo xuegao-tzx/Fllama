@@ -99,7 +99,7 @@
     }
 
     if (params[@"seed"]) {
-        defaultParams.sparams.seed = [params[@"seed"] intValue];
+        defaultParams.sampling.seed = [params[@"seed"] intValue];
     }
 
     int nThreads = params[@"n_threads"] ? [params[@"n_threads"] intValue] : 0;
@@ -114,18 +114,18 @@
     context->llama->loading_progress = 0;
     context->onProgress = onProgress;
 
-//    if (params[@"use_progress_callback"] && [params[@"use_progress_callback"] boolValue]) {
-        defaultParams.progress_callback = [](float progress, void * user_data) {
-            FLlamaContext *context = (__bridge FLlamaContext *)(user_data);
-            unsigned percentage = (unsigned) (100 * progress);
-            if (percentage > context->llama->loading_progress) {
-                context->llama->loading_progress = percentage;
+    defaultParams.progress_callback = [](float progress, void *user_data) {
+        FLlamaContext *context = (__bridge FLlamaContext *) (user_data);
+        unsigned percentage = (unsigned) (100 * progress);
+        if (percentage > context->llama->loading_progress) {
+            context->llama->loading_progress = percentage;
+            if (params[@"emit_load_progress"] && [params[@"emit_load_progress"] boolValue]) {
                 context->onProgress(percentage);
             }
-            return !context->llama->is_load_interrupted;
-        };
-        defaultParams.progress_callback_user_data = context;
-//    }
+        }
+        return !context->llama->is_load_interrupted;
+    };
+    defaultParams.progress_callback_user_data = context;
 
     context->is_model_loaded = context->llama->loadModel(defaultParams);
     context->is_metal_enabled = isMetalEnabled;
@@ -226,7 +226,7 @@
     NSString *prompt = [params objectForKey:@"prompt"];
 
     llama->params.prompt = [prompt UTF8String];
-    llama->params.sparams.seed = params[@"seed"] ? [params[@"seed"] intValue] : -1;
+    llama->params.sampling.seed = params[@"seed"] ? [params[@"seed"] intValue] : -1;
 
     if (params[@"n_threads"]) {
         int nThreads = params[@"n_threads"] ? [params[@"n_threads"] intValue] : llama->params.cpuparams.n_threads;
@@ -240,74 +240,76 @@
         llama->params.n_predict = [params[@"n_predict"] intValue];
     }
 
-    auto & sparams = llama->params.sparams;
+    auto & sampling = llama->params.sampling;
 
     if (params[@"temperature"]) {
-        sparams.temp = [params[@"temperature"] doubleValue];
+        sampling.temp = [params[@"temperature"] doubleValue];
     }
 
     if (params[@"n_probs"]) {
-        sparams.n_probs = [params[@"n_probs"] intValue];
+        sampling.n_probs = [params[@"n_probs"] intValue];
     }
 
     if (params[@"penalty_last_n"]) {
-        sparams.penalty_last_n = [params[@"penalty_last_n"] intValue];
+        sampling.penalty_last_n = [params[@"penalty_last_n"] intValue];
     }
 
     if (params[@"penalty_repeat"]) {
-        sparams.penalty_repeat = [params[@"penalty_repeat"] doubleValue];
+        sampling.penalty_repeat = [params[@"penalty_repeat"] doubleValue];
     }
 
     if (params[@"penalty_freq"]) {
-        sparams.penalty_freq = [params[@"penalty_freq"] doubleValue];
+        sampling.penalty_freq = [params[@"penalty_freq"] doubleValue];
     }
 
     if (params[@"penalty_present"]) {
-        sparams.penalty_present = [params[@"penalty_present"] doubleValue];
+        sampling.penalty_present = [params[@"penalty_present"] doubleValue];
     }
 
     if (params[@"mirostat"]) {
-        sparams.mirostat = [params[@"mirostat"] intValue];
+        sampling.mirostat = [params[@"mirostat"] intValue];
     }
 
     if (params[@"mirostat_tau"]) {
-        sparams.mirostat_tau = [params[@"mirostat_tau"] doubleValue];
+        sampling.mirostat_tau = [params[@"mirostat_tau"] doubleValue];
     }
 
     if (params[@"mirostat_eta"]) {
-        sparams.mirostat_eta = [params[@"mirostat_eta"] doubleValue];
+        sampling.mirostat_eta = [params[@"mirostat_eta"] doubleValue];
     }
 
     if (params[@"penalize_nl"]) {
-        sparams.penalize_nl = [params[@"penalize_nl"] boolValue];
+        sampling.penalize_nl = [params[@"penalize_nl"] boolValue];
     }
 
     if (params[@"top_k"]) {
-        sparams.top_k = [params[@"top_k"] intValue];
+        sampling.top_k = [params[@"top_k"] intValue];
     }
 
     if (params[@"top_p"]) {
-        sparams.top_p = [params[@"top_p"] doubleValue];
+        sampling.top_p = [params[@"top_p"] doubleValue];
     }
 
     if (params[@"min_p"]) {
-        sparams.min_p = [params[@"min_p"] doubleValue];
+        sampling.min_p = [params[@"min_p"] doubleValue];
     }
 
     if (params[@"typical_p"]) {
-        sparams.typ_p = [params[@"typical_p"] doubleValue];
+        sampling.typ_p = [params[@"typical_p"] doubleValue];
     }
 
     if (params[@"xtc_threshold"]) {
-        sparams.xtc_threshold = [params[@"xtc_threshold"] doubleValue];
+        sampling.xtc_threshold = [params[@"xtc_threshold"] doubleValue];
     }
 
     if (params[@"xtc_probability"]) {
-        sparams.xtc_probability = [params[@"xtc_probability"] doubleValue];
+        sampling.xtc_probability = [params[@"xtc_probability"] doubleValue];
     }
 
-    if (params[@"grammar"]) {
-        sparams.grammar = [params[@"grammar"] UTF8String];
+    if (params[@"grammar"]  &&
+        [params[@"grammar"] isKindOfClass:[NSString class]] &&
+        [params[@"grammar"] length] > 0) {
+        sampling.grammar = [params[@"grammar"] UTF8String];
     }
 
     llama->params.antiprompt.clear();
@@ -320,10 +322,10 @@
         }
     }
 
-    sparams.logit_bias.clear();
+    sampling.logit_bias.clear();
 
     if (params[@"ignore_eos"] && [params[@"ignore_eos"] boolValue]) {
-        sparams.logit_bias.push_back({ llama_token_eos(llama->model), -INFINITY });
+        sampling.logit_bias.push_back({ llama_token_eos(llama->model), -INFINITY });
     }
 
     if (params[@"logit_bias"] && [params[@"logit_bias"] isKindOfClass:[NSArray class]]) {
@@ -336,9 +338,9 @@
 
                 if (tok >= 0 && tok < n_vocab) {
                     if ([el[1] isKindOfClass:[NSNumber class]]) {
-                        sparams.logit_bias.push_back({ tok, [el[1] floatValue] });
+                        sampling.logit_bias.push_back({ tok, [el[1] floatValue] });
                     } else if ([el[1] isKindOfClass:[NSNumber class]] && ![el[1] boolValue]) {
-                        sparams.logit_bias.push_back({ tok, -INFINITY });
+                        sampling.logit_bias.push_back({ tok, -INFINITY });
                     }
                 }
             }
@@ -397,7 +399,7 @@
             NSMutableDictionary *tokenResult = [[NSMutableDictionary alloc] init];
             tokenResult[@"token"] = [NSString stringWithUTF8String:to_send.c_str()];
 
-            if (llama->params.sparams.n_probs > 0) {
+            if (llama->params.sampling.n_probs > 0) {
                 const std::vector<llama_token> to_send_toks = common_tokenize(llama->ctx, to_send, false);
                 size_t probs_pos = std::min(sent_token_probs_index, llama->generated_token_probs.size());
                 size_t probs_stop_pos = std::min(sent_token_probs_index + to_send_toks.size(), llama->generated_token_probs.size());

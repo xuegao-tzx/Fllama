@@ -280,7 +280,7 @@ Java_ink_xcl_fllama_LlamaContext_00024Companion_startCompletion(JNIEnv *env, job
     llama_perf_context_reset(llama->ctx);
 
     llama->params.prompt = env->GetStringUTFChars(prompt, nullptr);
-    llama->params.sparams.seed = seed;
+    llama->params.sampling.seed = seed;
 
     int max_threads = std::thread::hardware_concurrency();
     // Use 3 threads by default on 4-core devices, 4 threads on more cores
@@ -288,29 +288,29 @@ Java_ink_xcl_fllama_LlamaContext_00024Companion_startCompletion(JNIEnv *env, job
     llama->params.cpuparams.n_threads = n_threads > 0 ? n_threads : default_n_threads;
 
     llama->params.n_predict = n_predict;
-    llama->params.sparams.ignore_eos = ignore_eos;
+    llama->params.sampling.ignore_eos = ignore_eos;
 
-    auto &sparams = llama->params.sparams;
-    sparams.temp = temperature;
-    sparams.penalty_last_n = penalty_last_n;
-    sparams.penalty_repeat = penalty_repeat;
-    sparams.penalty_freq = penalty_freq;
-    sparams.penalty_present = penalty_present;
-    sparams.mirostat = mirostat;
-    sparams.mirostat_tau = mirostat_tau;
-    sparams.mirostat_eta = mirostat_eta;
-    sparams.penalize_nl = penalize_nl;
-    sparams.top_k = top_k;
-    sparams.top_p = top_p;
-    sparams.min_p = min_p;
-    sparams.typ_p = typical_p;
-    sparams.xtc_threshold = xtc_threshold;
-    sparams.xtc_probability = xtc_probability;
-    sparams.n_probs = n_probs;
-    sparams.grammar = env->GetStringUTFChars(grammar, nullptr);
-    sparams.logit_bias.clear();
+    auto &sampling = llama->params.sampling;
+    sampling.temp = temperature;
+    sampling.penalty_last_n = penalty_last_n;
+    sampling.penalty_repeat = penalty_repeat;
+    sampling.penalty_freq = penalty_freq;
+    sampling.penalty_present = penalty_present;
+    sampling.mirostat = mirostat;
+    sampling.mirostat_tau = mirostat_tau;
+    sampling.mirostat_eta = mirostat_eta;
+    sampling.penalize_nl = penalize_nl;
+    sampling.top_k = top_k;
+    sampling.top_p = top_p;
+    sampling.min_p = min_p;
+    sampling.typ_p = typical_p;
+    sampling.xtc_threshold = xtc_threshold;
+    sampling.xtc_probability = xtc_probability;
+    sampling.n_probs = n_probs;
+    sampling.grammar = env->GetStringUTFChars(grammar, nullptr);
+    sampling.logit_bias.clear();
     if (ignore_eos) {
-        sparams.logit_bias.push_back({llama_token_eos(llama->model), -INFINITY});
+        sampling.logit_bias.push_back({llama_token_eos(llama->model), -INFINITY});
     }
 
     const int n_vocab = llama_n_vocab(llama_get_model(llama->ctx));
@@ -323,9 +323,9 @@ Java_ink_xcl_fllama_LlamaContext_00024Companion_startCompletion(JNIEnv *env, job
             llama_token tok = static_cast<llama_token>(doubleArray[0]);
             if (tok >= 0 && tok < n_vocab) {
                 if (doubleArray[1] != 0) {  // If the second element is not false (0)
-                    sparams.logit_bias.push_back({tok, 1.0f});
+                    sampling.logit_bias.push_back({tok, 1.0f});
                 } else {
-                    sparams.logit_bias.push_back({tok, -INFINITY});
+                    sampling.logit_bias.push_back({tok, -INFINITY});
                 }
             }
 
@@ -388,7 +388,7 @@ Java_ink_xcl_fllama_LlamaContext_00024Companion_startCompletion(JNIEnv *env, job
             jobject tokenResult = futils::createMap(env);
             futils::putString(env, tokenResult, "token", to_send.c_str());
 
-            if (llama->params.sparams.n_probs > 0) {
+            if (llama->params.sampling.n_probs > 0) {
                 const std::vector<llama_token> to_send_toks = common_tokenize(llama->ctx, to_send,
                                                                              false);
                 size_t probs_pos = std::min(sent_token_probs_index,

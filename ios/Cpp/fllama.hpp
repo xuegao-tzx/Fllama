@@ -196,7 +196,7 @@ struct fllama_context
     {
         is_interrupted = false;
         params.antiprompt.clear();
-        params.sparams.grammar.clear();
+        params.sampling.grammar.clear();
         num_prompt_tokens = 0;
         num_tokens_predicted = 0;
         generated_text = "";
@@ -210,14 +210,14 @@ struct fllama_context
         incomplete = false;
         n_remain = 0;
         n_past = 0;
-        params.sparams.n_prev = n_ctx;
+        params.sampling.n_prev = n_ctx;
     }
 
     bool initSampling() {
         if (ctx_sampling != nullptr) {
             common_sampler_free(ctx_sampling);
         }
-        ctx_sampling = common_sampler_init(model,params.sparams);
+        ctx_sampling = common_sampler_init(model,params.sampling);
         return ctx_sampling != nullptr;
     }
 
@@ -326,7 +326,7 @@ struct fllama_context
     {
         // number of tokens to keep when resetting context
         n_remain = params.n_predict;
-        //TODO:llama_set_rng_seed(ctx, params.sparams.seed);
+        //TODO:llama_set_rng_seed(ctx, params.sampling.seed);
 
         is_predicting = true;
     }
@@ -461,7 +461,7 @@ struct fllama_context
         const std::string token_text = token_with_probs.tok == -1 ? "" : common_token_to_piece(ctx, token_with_probs.tok);
         generated_text += token_text;
 
-        if (params.sparams.n_probs > 0)
+        if (params.sampling.n_probs > 0)
         {
             generated_token_probs.push_back(token_with_probs);
         }

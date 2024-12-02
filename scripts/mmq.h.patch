@@ -1,0 +1,9 @@
+--- mmq.h.orig
++++ mmq.h
+@@ -1,5 +1,5 @@
+ #pragma once
+-#include "common.h"
++#include "amx-common.h"
+ 
+ #ifdef __cplusplus
+ extern "C" {

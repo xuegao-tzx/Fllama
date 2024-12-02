@@ -831,6 +831,15 @@ static const struct lm_ggml_type_traits type_traits[LM_GGML_TYPE_COUNT] = {
         .to_float                 = (lm_ggml_to_float_t) dequantize_row_tq2_0,
         .from_float_ref           = (lm_ggml_from_float_t) quantize_row_tq2_0_ref,
     },
+    [LM_GGML_TYPE_IQ4_NL_4_4] = {
+        .type_name                = "iq4_nl_4x4",
+        .blck_size                = QK4_NL,
+        .blck_size_interleave     = 4,
+        .type_size                = sizeof(block_iq4_nl),
+        .is_quantized             = true,
+        .to_float                 = NULL,
+        .from_float_ref           = NULL,
+    },
 };
 
 const struct lm_ggml_type_traits * lm_ggml_get_type_traits(enum lm_ggml_type type) {
@@ -7570,4 +7579,27 @@ void lm_gguf_get_meta_data(const struct lm_gguf_context * ctx, void * data) {
 void lm_ggml_log_set(lm_ggml_log_callback log_callback, void * user_data) {
     g_logger_state.log_callback = log_callback ? log_callback : lm_ggml_log_callback_default;
     g_logger_state.log_callback_user_data = user_data;
+}
+
+void lm_ggml_threadpool_params_init(struct lm_ggml_threadpool_params * p, int n_threads) {
+    p->n_threads  = n_threads;
+    p->prio       = 0;     // default priority (usually means normal or inherited)
+    p->poll       = 50;    // hybrid-polling enabled
+    p->strict_cpu = false; // no strict placement (all threads share same cpumask)
+    p->paused     = false; // threads are ready to go
+    memset(p->cpumask, 0, LM_GGML_MAX_N_THREADS); // all-zero means use the default affinity (usually inherited)
+}
+
+struct lm_ggml_threadpool_params lm_ggml_threadpool_params_default(int n_threads) {
+    struct lm_ggml_threadpool_params p;
+    lm_ggml_threadpool_params_init(&p, n_threads);
+    return p;
+}
+
+bool lm_ggml_threadpool_params_match(const struct lm_ggml_threadpool_params * p0, const struct lm_ggml_threadpool_params * p1) {
+    if (p0->n_threads      != p1->n_threads  )    return false;
+    if (p0->prio           != p1->prio       )    return false;
+    if (p0->poll           != p1->poll       )    return false;
+    if (p0->strict_cpu     != p1->strict_cpu )    return false;
+    return memcmp(p0->cpumask, p1->cpumask, LM_GGML_MAX_N_THREADS) == 0;
 }

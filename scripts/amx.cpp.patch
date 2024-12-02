@@ -1,0 +1,9 @@
+--- amx.cpp.orig
++++ amx.cpp
+@@ -1,5 +1,5 @@
+ #include "amx.h"
+-#include "common.h"
++#include "amx-common.h"
+ #include "mmq.h"
+ #include "ggml-backend-impl.h"
+ #include "ggml-backend.h"
