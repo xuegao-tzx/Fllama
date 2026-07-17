@@ -113,5 +113,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.7.0"
     implementation "com.google.android.material:material:1.13.0-alpha08"
     implementation "androidx.annotation:annotation:1.9.1"
-    implementation platform("org.jetbrains.kotlin:kotlin-bom:2.0.21")
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:2.4.10")
 }
